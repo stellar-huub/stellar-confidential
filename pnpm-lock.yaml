@@ -36,6 +36,27 @@ importers:
         specifier: ^8.20.0
         version: 8.70.0(eslint@9.39.5)(typescript@5.9.3)
 
+  examples/end-to-end:
+    dependencies:
+      '@stellar-confidential/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@stellar-confidential/crypto':
+        specifier: workspace:*
+        version: link:../../packages/crypto
+      '@stellar-confidential/indexer':
+        specifier: workspace:*
+        version: link:../../packages/indexer
+      '@stellar-confidential/recovery':
+        specifier: workspace:*
+        version: link:../../packages/recovery
+      '@stellar-confidential/service-indexer':
+        specifier: workspace:*
+        version: link:../../services/indexer
+      '@stellar-confidential/service-recovery':
+        specifier: workspace:*
+        version: link:../../services/recovery
+
   packages/core:
     dependencies:
       '@noble/hashes':

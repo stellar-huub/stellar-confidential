@@ -85,7 +85,8 @@ export class MemoryEventStore implements EventStore {
     return {
       events: page,
       hasMore,
-      nextCursor: hasMore && page.length > 0 ? (page[page.length - 1] as ConfidentialEvent).cursor : null,
+      nextCursor:
+        hasMore && page.length > 0 ? (page[page.length - 1] as ConfidentialEvent).cursor : null,
     };
   }
 

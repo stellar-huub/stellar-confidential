@@ -69,10 +69,7 @@ function toEvent(row: EventRow): ConfidentialEvent {
 }
 
 /** Build the shared WHERE clause for both paging and counting. */
-function buildFilter(
-  query: Omit<EventQuery, 'limit'>,
-  params: unknown[],
-): string {
+function buildFilter(query: Omit<EventQuery, 'limit'>, params: unknown[]): string {
   const clauses: string[] = [];
   const add = (sql: string, value: unknown): void => {
     params.push(value);
@@ -148,10 +145,7 @@ export class PostgresEventStore implements EventStore {
     }
   }
 
-  private async appendInTransaction(
-    client: PoolClient,
-    batch: IngestBatch,
-  ): Promise<AppendResult> {
+  private async appendInTransaction(client: PoolClient, batch: IngestBatch): Promise<AppendResult> {
     let ledgersInserted = 0;
     for (const ledger of batch.ledgers) {
       const inserted = await client.query(
@@ -227,7 +221,8 @@ export class PostgresEventStore implements EventStore {
     return {
       events: page,
       hasMore,
-      nextCursor: hasMore && page.length > 0 ? (page[page.length - 1] as ConfidentialEvent).cursor : null,
+      nextCursor:
+        hasMore && page.length > 0 ? (page[page.length - 1] as ConfidentialEvent).cursor : null,
     };
   }
 
@@ -299,7 +294,9 @@ export class PostgresEventStore implements EventStore {
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
-      const removed = await client.query('DELETE FROM events WHERE ledger_sequence > $1', [sequence]);
+      const removed = await client.query('DELETE FROM events WHERE ledger_sequence > $1', [
+        sequence,
+      ]);
       await client.query('DELETE FROM ledgers WHERE sequence > $1', [sequence]);
       // Never leave a checkpoint pointing above the history that survives.
       await client.query(
@@ -351,7 +348,10 @@ export class PostgresEventStore implements EventStore {
       eventCount: Number(row?.count ?? 0),
       firstCursor: row?.first_cursor ?? null,
       lastCursor: row?.last_cursor ?? null,
-      lastLedgerSequence: row?.last_ledger === null || row?.last_ledger === undefined ? null : Number(row.last_ledger),
+      lastLedgerSequence:
+        row?.last_ledger === null || row?.last_ledger === undefined
+          ? null
+          : Number(row.last_ledger),
     };
   }
 
@@ -359,7 +359,9 @@ export class PostgresEventStore implements EventStore {
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
-      const removed = await client.query('DELETE FROM events WHERE ledger_sequence < $1', [sequence]);
+      const removed = await client.query('DELETE FROM events WHERE ledger_sequence < $1', [
+        sequence,
+      ]);
       await client.query('DELETE FROM ledgers WHERE sequence < $1', [sequence]);
       await client.query('COMMIT');
       return removed.rowCount ?? 0;

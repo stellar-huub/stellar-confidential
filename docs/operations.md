@@ -6,10 +6,10 @@ Running the indexer and recovery services. Milestone M1.6.
 
 ## Services
 
-| Service | Purpose | Default port |
-|---------|---------|--------------|
-| `services/indexer` | Ingests Confidential Token events and serves the archive API | 4000 |
-| `services/recovery` | Recovery session coordination | 4010 |
+| Service             | Purpose                                                      | Default port |
+| ------------------- | ------------------------------------------------------------ | ------------ |
+| `services/indexer`  | Ingests Confidential Token events and serves the archive API | 4000         |
+| `services/recovery` | Recovery session coordination                                | 4010         |
 
 The indexer runs ingestion and the API in one process. The API only reads what ingestion has committed, so keeping them together removes a class of "which one is behind" questions. Splitting them for a larger deployment needs no code change — both sides talk only to the store.
 
@@ -38,14 +38,14 @@ curl -s localhost:4000/openapi.json | jq '.info'
 
 ## What to watch
 
-| Signal | Where | Healthy | Act when |
-|--------|-------|---------|----------|
-| **Ledger lag** | `/health` `latestLedger` vs the node's | within ~5 ledgers | sustained above 20 |
-| **Checkpoint progress** | `/health` `checkpointLedger` | advancing every poll | flat for more than a minute |
-| **Ingest errors** | `ingest pass failed` log lines | none | any repeated code |
-| **Reorg rate** | `reorg detected` / `rewound after reorg` | rare | more than a few per hour |
-| **Event count** | `/health` `eventCount` | monotonic | any decrease not explained by pruning |
-| **RPC retries** | `rpc retry` log lines | occasional | sustained, means the node is struggling |
+| Signal                  | Where                                    | Healthy              | Act when                                |
+| ----------------------- | ---------------------------------------- | -------------------- | --------------------------------------- |
+| **Ledger lag**          | `/health` `latestLedger` vs the node's   | within ~5 ledgers    | sustained above 20                      |
+| **Checkpoint progress** | `/health` `checkpointLedger`             | advancing every poll | flat for more than a minute             |
+| **Ingest errors**       | `ingest pass failed` log lines           | none                 | any repeated code                       |
+| **Reorg rate**          | `reorg detected` / `rewound after reorg` | rare                 | more than a few per hour                |
+| **Event count**         | `/health` `eventCount`                   | monotonic            | any decrease not explained by pruning   |
+| **RPC retries**         | `rpc retry` log lines                    | occasional           | sustained, means the node is struggling |
 
 Ledger lag is the primary indicator. M1.6's acceptance criterion is staying within 5 ledgers of the tip for 7 consecutive days.
 

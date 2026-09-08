@@ -12,7 +12,8 @@ export type LogLevel = (typeof LOG_LEVELS)[number];
 
 const LEVEL_RANK: Record<LogLevel, number> = { debug: 10, info: 20, warn: 30, error: 40 };
 
-const FORBIDDEN_FIELD = /secret|seed|mnemonic|privkey|private_?key|spend_?key|viewing_?key|password/i;
+const FORBIDDEN_FIELD =
+  /secret|seed|mnemonic|privkey|private_?key|spend_?key|viewing_?key|password/i;
 
 export type LogFields = Record<string, unknown>;
 

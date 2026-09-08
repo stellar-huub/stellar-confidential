@@ -1,6 +1,11 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { computeRangeDigest, CURSOR_MAX, CURSOR_MIN, RecoveryError } from '@stellar-confidential/core';
+import {
+  computeRangeDigest,
+  CURSOR_MAX,
+  CURSOR_MIN,
+  RecoveryError,
+} from '@stellar-confidential/core';
 import { encryptAmount } from '@stellar-confidential/crypto';
 import { replayFromGenesis } from '../src/replay.js';
 import { verifyEventIntegrity, verifyState } from '../src/verify.js';
@@ -52,7 +57,9 @@ describe('verifyState', () => {
     const report = input({ viewingKey: bobKeys.viewing });
     assert.equal(report.verified, false);
     assert.equal(report.failure?.code, 'WRONG_KEY');
-    assert.ok(report.checks.some((check) => check.name === 'chain-balance-decrypts' && !check.passed));
+    assert.ok(
+      report.checks.some((check) => check.name === 'chain-balance-decrypts' && !check.passed),
+    );
   });
 
   it('reports STALE_INDEX when the archive lags, even if our balance is self-consistent', () => {
@@ -138,9 +145,7 @@ describe('verifyEventIntegrity', () => {
 
   it('rejects an archive that alters an amount', () => {
     const tampered = history.events.map((event, index) =>
-      index === 3
-        ? { ...event, amount: encryptAmount(999_999n, aliceKeys.viewing, rng) }
-        : event,
+      index === 3 ? { ...event, amount: encryptAmount(999_999n, aliceKeys.viewing, rng) } : event,
     );
     assert.throws(() => verifyEventIntegrity(tampered, digest, 'archive-a'), RecoveryError);
   });

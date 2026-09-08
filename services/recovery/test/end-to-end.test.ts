@@ -111,7 +111,10 @@ function chainSource(balance: EncryptedAmount | null, ledger: number): ChainBala
 describe('chain → indexer → archive → recovery', () => {
   it('recovers a wiped wallet across 100+ transactions and verifies it (M2.4)', async () => {
     const built = buildPayrollChain(100);
-    assert.ok(built.transactionCount >= 100, `expected 100+ transactions, got ${built.transactionCount}`);
+    assert.ok(
+      built.transactionCount >= 100,
+      `expected 100+ transactions, got ${built.transactionCount}`,
+    );
 
     const store = await indexed(built.chain);
     const source = new StoreEventSource(store, new IntegrityService(store));
@@ -168,8 +171,7 @@ describe('chain → indexer → archive → recovery', () => {
 
     // Bob's key against Alice's history: an error, never a plausible balance.
     await assert.rejects(
-      () =>
-        new RecoverySession({ account: ALICE, viewingKey: bobKeys.viewing, source }).sync(),
+      () => new RecoverySession({ account: ALICE, viewingKey: bobKeys.viewing, source }).sync(),
       (error: unknown) => {
         assert.ok(error instanceof RecoveryError);
         assert.equal(error.code, 'WRONG_KEY');
@@ -225,7 +227,8 @@ describe('chain → indexer → archive → recovery', () => {
         const page = await honest.fetchAccountEvents(request);
         return { ...page, events: page.events.slice(0, -1) };
       },
-      fetchDigest: (request: Parameters<typeof honest.fetchDigest>[0]) => honest.fetchDigest(request),
+      fetchDigest: (request: Parameters<typeof honest.fetchDigest>[0]) =>
+        honest.fetchDigest(request),
       status: () => honest.status(),
     };
 
@@ -273,7 +276,10 @@ describe('chain → indexer → archive → recovery', () => {
     }).sync();
 
     // Orphaned events are gone from the recovered history.
-    assert.equal(store.snapshot().every((event) => event.proof.ledgerSequence <= 10), true);
+    assert.equal(
+      store.snapshot().every((event) => event.proof.ledgerSequence <= 10),
+      true,
+    );
     assert.ok(result.state.history.some((entry) => entry.value === 7_777n));
   });
 });

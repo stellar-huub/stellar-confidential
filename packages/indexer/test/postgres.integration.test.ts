@@ -7,7 +7,12 @@ import { MemoryEventStore } from '../src/store-memory.js';
 import { Ingestor } from '../src/pipeline.js';
 import { ReferenceContractAdapter } from '../src/adapters/reference.js';
 import { SyntheticChain } from '../src/testing/synthetic.js';
-import { merkleRoot, CURSOR_MAX, CURSOR_MIN, type ConfidentialEvent } from '@stellar-confidential/core';
+import {
+  merkleRoot,
+  CURSOR_MAX,
+  CURSOR_MIN,
+  type ConfidentialEvent,
+} from '@stellar-confidential/core';
 import { runStoreConformance } from './store-conformance.js';
 import { DATABASE_URL, INTEGRATION_ENABLED, skipUnlessIntegration } from './integration-config.js';
 
@@ -44,7 +49,9 @@ describe('PostgreSQL parity with the in-memory store', { skip: skipUnlessIntegra
                 type: 'transfer',
                 account: 'GALICE',
                 counterparty: 'GBOB',
-                amount: { limbs: [{ commitment: `a${i}`.padEnd(64, '0'), handle: `a${i}`.padEnd(64, '1') }] },
+                amount: {
+                  limbs: [{ commitment: `a${i}`.padEnd(64, '0'), handle: `a${i}`.padEnd(64, '1') }],
+                },
                 counterpartyAmount: {
                   limbs: [{ commitment: `b${i}`.padEnd(64, '0'), handle: `b${i}`.padEnd(64, '1') }],
                 },
@@ -56,7 +63,9 @@ describe('PostgreSQL parity with the in-memory store', { skip: skipUnlessIntegra
     return built;
   }
 
-  async function drain(target: PostgresEventStore | MemoryEventStore): Promise<ConfidentialEvent[]> {
+  async function drain(
+    target: PostgresEventStore | MemoryEventStore,
+  ): Promise<ConfidentialEvent[]> {
     const events: ConfidentialEvent[] = [];
     for await (const event of target.streamRange(CURSOR_MIN, CURSOR_MAX)) events.push(event);
     return events;
@@ -97,7 +106,9 @@ describe('PostgreSQL parity with the in-memory store', { skip: skipUnlessIntegra
   it('cascades events when a ledger is rolled back', async () => {
     const removed = await store.rollbackTo(15);
     assert.ok(removed > 0);
-    const { rows } = await pool.query('SELECT count(*)::int AS count FROM events WHERE ledger_sequence > 15');
+    const { rows } = await pool.query(
+      'SELECT count(*)::int AS count FROM events WHERE ledger_sequence > 15',
+    );
     assert.equal(rows[0]?.count, 0);
   });
 

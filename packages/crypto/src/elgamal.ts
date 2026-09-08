@@ -1,6 +1,14 @@
 import { randomBytes } from '@noble/hashes/utils.js';
 import { CryptoError, type EncryptedLimb } from '@stellar-confidential/core';
-import { G, GROUP_ORDER, IDENTITY, type Point, pointFromHex, pointToHex, scalarMultiply } from './group.js';
+import {
+  G,
+  GROUP_ORDER,
+  IDENTITY,
+  type Point,
+  pointFromHex,
+  pointToHex,
+  scalarMultiply,
+} from './group.js';
 import type { ViewingKey, ViewingPublicKey } from './keys.js';
 
 /**

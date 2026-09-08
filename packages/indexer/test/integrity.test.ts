@@ -13,11 +13,7 @@ describe('IntegrityService', () => {
     store = new MemoryEventStore();
     await store.append({
       ledgers: [makeLedger(1, 2), makeLedger(2, 1)],
-      events: [
-        makeEvent(1, 0),
-        makeEvent(1, 1, { account: 'GBOB' }),
-        makeEvent(2, 0),
-      ],
+      events: [makeEvent(1, 0), makeEvent(1, 1, { account: 'GBOB' }), makeEvent(2, 0)],
       checkpoint: { name: 'primary', cursor: 'c', ledgerSequence: 2 },
     });
   });
@@ -42,9 +38,9 @@ describe('IntegrityService', () => {
 
   it('detects an archive that alters an event', async () => {
     const digest = await new IntegrityService(store).digest();
-    const tampered = store.snapshot().map((event, index) =>
-      index === 1 ? { ...event, delta: 'debit' as const } : event,
-    );
+    const tampered = store
+      .snapshot()
+      .map((event, index) => (index === 1 ? { ...event, delta: 'debit' as const } : event));
     assert.ok(verifyAgainstDigest(tampered, digest).some((problem) => problem.kind === 'root'));
   });
 

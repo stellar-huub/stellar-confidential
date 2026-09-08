@@ -32,7 +32,11 @@ export function sendJson(response: ServerResponse, status: number, body: unknown
 export function sendError(response: ServerResponse, logger: Logger, error: unknown): void {
   if (error instanceof ValidationError) {
     const status = error.code === 'NOT_FOUND' ? 404 : error.code === 'RATE_LIMITED' ? 429 : 400;
-    sendJson(response, status, { error: error.code, message: error.message, context: error.context });
+    sendJson(response, status, {
+      error: error.code,
+      message: error.message,
+      context: error.context,
+    });
     return;
   }
   if (isConfidentialError(error)) {

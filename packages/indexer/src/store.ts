@@ -36,7 +36,11 @@ export interface IngestCheckpoint {
 export interface IngestBatch {
   readonly ledgers: readonly LedgerRecord[];
   readonly events: readonly ConfidentialEvent[];
-  readonly checkpoint: { readonly name: string; readonly cursor: string; readonly ledgerSequence: number };
+  readonly checkpoint: {
+    readonly name: string;
+    readonly cursor: string;
+    readonly ledgerSequence: number;
+  };
 }
 
 export interface AppendResult {

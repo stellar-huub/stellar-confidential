@@ -2,7 +2,7 @@
 
 The canonical event model every part of this project stores, serves, verifies and replays.
 
-**Status: working spec.** The *shape* below is settled and everything downstream is built on it. The mapping from a specific Confidential Token contract's on-chain events onto this shape is the job of a `ContractAdapter`, and reconciling that mapping with the canonical Stellar contract is the open item tracked at the end of this document.
+**Status: working spec.** The _shape_ below is settled and everything downstream is built on it. The mapping from a specific Confidential Token contract's on-chain events onto this shape is the job of a `ContractAdapter`, and reconciling that mapping with the canonical Stellar contract is the open item tracked at the end of this document.
 
 ---
 
@@ -40,11 +40,11 @@ The cursor is also the event's **primary key**. Re-ingesting a ledger inserts no
 
 Stellar RPC identifies an event as `<toid>-<ordinal>`, where the TOID packs the position into 64 bits:
 
-| bits | field |
-|------|-------|
-| 63–32 | ledger sequence |
+| bits  | field                         |
+| ----- | ----------------------------- |
+| 63–32 | ledger sequence               |
 | 31–20 | transaction application order |
-| 19–0  | operation index |
+| 19–0  | operation index               |
 
 `decodeEventId` in `@stellar-confidential/indexer` unpacks it. This is used rather than the RPC's separate index fields because older RPC releases do not return them.
 
@@ -54,32 +54,32 @@ Stellar RPC identifies an event as `<toid>-<ordinal>`, where the TOID packs the 
 
 ```typescript
 interface ConfidentialEvent {
-  id: string;            // equal to the cursor
+  id: string; // equal to the cursor
   cursor: string;
   type: ConfidentialEventType;
   contractId: string;
-  account: string;       // whose confidential state this event mutates
+  account: string; // whose confidential state this event mutates
   counterparty: string | null;
   delta: BalanceDelta;
-  amount: EncryptedAmount | null;   // encrypted to `account`'s viewing key
-  publicAmount: string | null;      // stroops, decimal string
+  amount: EncryptedAmount | null; // encrypted to `account`'s viewing key
+  publicAmount: string | null; // stroops, decimal string
   proof: LedgerProof;
-  raw: JsonValue;        // adapter-preserved original payload
+  raw: JsonValue; // adapter-preserved original payload
 }
 ```
 
 ### Types and deltas
 
-| `type` | `delta` | Meaning |
-|--------|---------|---------|
-| `deposit` | `credit` | Public balance moves into the confidential balance. `publicAmount` is set. |
-| `withdraw` | `debit` | Confidential balance moves out to the public balance. `publicAmount` is set. |
-| `transfer` | `debit` / `credit` | Confidential value moves between accounts. No public amount — that is the point. |
-| `rollover` | `replace` | Balance re-encrypted into canonical limbs. Value unchanged. |
-| `key_rotation` | `replace` | Balance re-encrypted under a new key. Value unchanged. |
-| `disclosure` | `none` | A viewing grant was issued, changed or revoked. |
+| `type`         | `delta`            | Meaning                                                                          |
+| -------------- | ------------------ | -------------------------------------------------------------------------------- |
+| `deposit`      | `credit`           | Public balance moves into the confidential balance. `publicAmount` is set.       |
+| `withdraw`     | `debit`            | Confidential balance moves out to the public balance. `publicAmount` is set.     |
+| `transfer`     | `debit` / `credit` | Confidential value moves between accounts. No public amount — that is the point. |
+| `rollover`     | `replace`          | Balance re-encrypted into canonical limbs. Value unchanged.                      |
+| `key_rotation` | `replace`          | Balance re-encrypted under a new key. Value unchanged.                           |
+| `disclosure`   | `none`             | A viewing grant was issued, changed or revoked.                                  |
 
-`replace` exists because rollover and key rotation change a balance's *representation* without changing its *value*. Replay must assign rather than accumulate for those — accumulating a rollover doubles the balance. This is the single most consequential field in the model and it is pinned by a test.
+`replace` exists because rollover and key rotation change a balance's _representation_ without changing its _value_. Replay must assign rather than accumulate for those — accumulating a rollover doubles the balance. This is the single most consequential field in the model and it is pinned by a test.
 
 ### Fan-out
 
@@ -109,7 +109,7 @@ Each limb is a `{ commitment, handle }` pair of compressed ristretto255 points, 
 commitment = value·G + r·P      handle = r·G      where P = viewingKey·G
 ```
 
-Randomness is independent per limb. Sharing one `r` across the limbs of an amount would make limb *differences* recoverable — `C_i − C_j = (m_i − m_j)·G` over a 16-bit range is trivially brute-forced — so it is not done.
+Randomness is independent per limb. Sharing one `r` across the limbs of an amount would make limb _differences_ recoverable — `C_i − C_j = (m_i − m_j)·G` over a 16-bit range is trivially brute-forced — so it is not done.
 
 Limbs are only canonical (`0 ≤ limb < 2^16`) when freshly encrypted. Homomorphic addition does not propagate carries, so an accumulated balance holds limbs outside that range, and subtraction can drive an individual limb negative while the total stays positive. Anything reading limbs must tolerate both. A `rollover` event returns a balance to canonical form.
 
@@ -156,12 +156,12 @@ topics = ["confidential_v1", <type>, <account>, <counterparty or "">]
 value  = type-specific object
 ```
 
-| `type` | `value` fields |
-|--------|----------------|
-| `deposit`, `withdraw` | `account`, `amount`, `publicAmount` |
-| `transfer` | `from`, `to`, `fromAmount`, `toAmount` |
-| `rollover`, `key_rotation` | `account`, `balance` |
-| `disclosure` | `account`, `auditor` |
+| `type`                     | `value` fields                         |
+| -------------------------- | -------------------------------------- |
+| `deposit`, `withdraw`      | `account`, `amount`, `publicAmount`    |
+| `transfer`                 | `from`, `to`, `fromAmount`, `toAmount` |
+| `rollover`, `key_rotation` | `account`, `balance`                   |
+| `disclosure`               | `account`, `auditor`                   |
 
 The reference codec is base64-encoded JSON (`jsonScValCodec`). It exercises the entire pipeline without an XDR dependency. A production adapter supplies an XDR codec instead — `scValToNative` from `@stellar/stellar-sdk` fits the `ScValCodec` signature directly, and that substitution is the only change required.
 
@@ -169,7 +169,7 @@ The reference codec is base64-encoded JSON (`jsonScValCodec`). It exercises the 
 
 ## Ingestion guarantees
 
-**Atomicity.** The pipeline advances a *ledger window* at a time. Every event in ledgers `[start, end]`, their headers, and the checkpoint commit together or not at all. There is no state in which half a ledger is durable, so a checkpoint always names a real boundary and re-running from it reproduces byte-identical state.
+**Atomicity.** The pipeline advances a _ledger window_ at a time. Every event in ledgers `[start, end]`, their headers, and the checkpoint commit together or not at all. There is no state in which half a ledger is durable, so a checkpoint always names a real boundary and re-running from it reproduces byte-identical state.
 
 **Idempotency.** Cursor is the primary key and inserts are `ON CONFLICT DO NOTHING`. Re-ingesting a ledger is a no-op.
 
@@ -183,12 +183,12 @@ The reference codec is base64-encoded JSON (`jsonScValCodec`). It exercises the 
 
 Reorg detection rests on reading a ledger's parent hash, and Stellar RPC returns it inside two different envelopes:
 
-| Method | Envelope | Layout |
-|--------|----------|--------|
-| `getLatestLedger` | `LedgerHeader` | `[0..3]` version, `[4..35]` previous hash |
-| `getLedgers` | `LedgerHeaderHistoryEntry` | `[0..31]` own hash, `[32..35]` version, `[36..67]` previous hash |
+| Method            | Envelope                   | Layout                                                           |
+| ----------------- | -------------------------- | ---------------------------------------------------------------- |
+| `getLatestLedger` | `LedgerHeader`             | `[0..3]` version, `[4..35]` previous hash                        |
+| `getLedgers`      | `LedgerHeaderHistoryEntry` | `[0..31]` own hash, `[32..35]` version, `[36..67]` previous hash |
 
-Both are parsed explicitly rather than sniffed, and the `getLedgers` parser also returns the embedded hash so the client can check it against the hash the node reported alongside it. Reading the wrong envelope yields a parent hash that never matches anything, which would disable reorg detection *silently* — so it fails loudly instead. This was a real bug, caught by running against a live node.
+Both are parsed explicitly rather than sniffed, and the `getLedgers` parser also returns the embedded hash so the client can check it against the hash the node reported alongside it. Reading the wrong envelope yields a parent hash that never matches anything, which would disable reorg detection _silently_ — so it fails loudly instead. This was a real bug, caught by running against a live node.
 
 ---
 
@@ -196,13 +196,13 @@ Both are parsed explicitly rather than sniffed, and the `getLedgers` parser also
 
 Resolve these against the canonical Confidential Token contract; each is confined to the adapter or the crypto package.
 
-| # | Item | Confined to |
-|---|------|-------------|
-| 1 | Actual topic names and XDR layout of contract events | `adapters/*.ts`, `ScValCodec` |
-| 2 | Whether the contract emits one event per transfer or one per party | `ContractAdapter.decode` |
-| 3 | Exact curve, encoding and limb layout of on-chain ciphertexts | `@stellar-confidential/crypto` |
-| 4 | How range proofs are carried, and whether the indexer must retain them | event model, `raw` |
-| 5 | Canonical `rollover` semantics and when the contract requires one | `BalanceDelta`, replay |
-| 6 | Whether key rotation re-encrypts history or only the current balance | replay, recovery |
+| #   | Item                                                                   | Confined to                    |
+| --- | ---------------------------------------------------------------------- | ------------------------------ |
+| 1   | Actual topic names and XDR layout of contract events                   | `adapters/*.ts`, `ScValCodec`  |
+| 2   | Whether the contract emits one event per transfer or one per party     | `ContractAdapter.decode`       |
+| 3   | Exact curve, encoding and limb layout of on-chain ciphertexts          | `@stellar-confidential/crypto` |
+| 4   | How range proofs are carried, and whether the indexer must retain them | event model, `raw`             |
+| 5   | Canonical `rollover` semantics and when the contract requires one      | `BalanceDelta`, replay         |
+| 6   | Whether key rotation re-encrypts history or only the current balance   | replay, recovery               |
 
 Until these are settled, the reference adapter is the specification. Every number in this document is exercised by the test suite, so a change to any of them fails loudly rather than silently altering a balance.

@@ -10,7 +10,13 @@
 import { hexToBytes } from '@noble/hashes/utils.js';
 import { G, pointToHex, scalarMultiply } from '../src/group.js';
 import { deriveKeyset } from '../src/keys.js';
-import { DEFAULT_BALANCE_BOUND, DEFAULT_LIMB_BOUND, decryptAmount, encryptAmount, verifyAmount } from '../src/amount.js';
+import {
+  DEFAULT_BALANCE_BOUND,
+  DEFAULT_LIMB_BOUND,
+  decryptAmount,
+  encryptAmount,
+  verifyAmount,
+} from '../src/amount.js';
 import { seededRandomScalar } from '../src/elgamal.js';
 import { clearDlogCache } from '../src/dlog.js';
 
@@ -35,7 +41,9 @@ bench('scalar multiply', 2_000, () => scalarMultiply(point, 98_765_432_198_765n)
 console.log('\namount operations (4 limbs, 64-bit amount)');
 const ciphertext = encryptAmount(1_234_567n, keys.viewing, rng);
 bench('encrypt', 500, () => encryptAmount(1_234_567n, keys.viewing, rng));
-bench('verify against known plaintext', 2_000, () => verifyAmount(ciphertext, keys.viewing, 1_234_567n));
+bench('verify against known plaintext', 2_000, () =>
+  verifyAmount(ciphertext, keys.viewing, 1_234_567n),
+);
 
 clearDlogCache();
 const cold = process.hrtime.bigint();

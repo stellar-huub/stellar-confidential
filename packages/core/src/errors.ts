@@ -37,7 +37,8 @@ export type CryptoErrorCode =
 
 export type ValidationErrorCode = 'INVALID_REQUEST' | 'NOT_FOUND' | 'RATE_LIMITED';
 
-export type ErrorCode = IndexerErrorCode | RecoveryErrorCode | CryptoErrorCode | ValidationErrorCode;
+export type ErrorCode =
+  IndexerErrorCode | RecoveryErrorCode | CryptoErrorCode | ValidationErrorCode;
 
 export interface ErrorContext {
   readonly [key: string]: string | number | boolean | null | undefined;

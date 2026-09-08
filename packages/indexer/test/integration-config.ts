@@ -8,8 +8,7 @@
 export const INTEGRATION_ENABLED = process.env['STELLAR_CONFIDENTIAL_INTEGRATION'] === '1';
 
 export const DATABASE_URL =
-  process.env['DATABASE_URL'] ??
-  'postgres://localhost:5432/stellar_confidential_test';
+  process.env['DATABASE_URL'] ?? 'postgres://localhost:5432/stellar_confidential_test';
 
 export const REDIS_URL = process.env['REDIS_URL'] ?? 'redis://localhost:6379';
 

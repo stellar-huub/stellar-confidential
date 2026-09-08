@@ -69,13 +69,13 @@ You do not need to be a cryptographer.
 
 ### Prerequisites
 
-| Tool | Version | Notes |
-|------|---------|-------|
-| Node.js | 20.x or 22.x LTS | |
-| pnpm | 9+ | `corepack enable` |
-| Docker | recent | for PostgreSQL and Redis |
-| Git | 2.30+ | |
-| Rust + `stellar` CLI | latest stable | only for contract work |
+| Tool                 | Version          | Notes                    |
+| -------------------- | ---------------- | ------------------------ |
+| Node.js              | 20.x or 22.x LTS |                          |
+| pnpm                 | 9+               | `corepack enable`        |
+| Docker               | recent           | for PostgreSQL and Redis |
+| Git                  | 2.30+            |                          |
+| Rust + `stellar` CLI | latest stable    | only for contract work   |
 
 ### First run
 
@@ -93,7 +93,7 @@ pnpm test
 
 If any of these steps fail on a clean clone, that is a bug — please open an issue. Keeping this sequence working is milestone **M0.1**.
 
-> **Note:** the repository is currently documentation and a pitch deck. The commands above describe the target set up defined in Phase 0 of [MILESTONES.md](MILESTONES.md); some are not wired up yet. If you are picking up a Phase 0 milestone, making these commands real *is* the task.
+> **Note:** the repository is currently documentation and a pitch deck. The commands above describe the target set up defined in Phase 0 of [MILESTONES.md](MILESTONES.md); some are not wired up yet. If you are picking up a Phase 0 milestone, making these commands real _is_ the task.
 
 ### Useful commands
 
@@ -207,7 +207,7 @@ Keep the subject under 72 characters, imperative mood, no trailing period.
 
 ### Errors
 
-Typed and actionable. A caller must be able to distinguish *missing events* from *wrong key* from *stale index* — this is a hard requirement of the recovery engine (milestone M2.3).
+Typed and actionable. A caller must be able to distinguish _missing events_ from _wrong key_ from _stale index_ — this is a hard requirement of the recovery engine (milestone M2.3).
 
 ```typescript
 // good
@@ -232,7 +232,7 @@ Never silently return a wrong value where a typed error belongs. A wrong confide
 
 ### Comments
 
-Explain *why*, not *what*. Cryptographic and consensus-adjacent code is the exception — there, explain the invariant being maintained and cite the spec section.
+Explain _why_, not _what_. Cryptographic and consensus-adjacent code is the exception — there, explain the invariant being maintained and cite the spec section.
 
 ### Logging
 
@@ -246,11 +246,11 @@ Explain *why*, not *what*. Cryptographic and consensus-adjacent code is the exce
 
 Every behavioural change needs a test. Bug fixes need a test that fails before the fix.
 
-| Layer | What it covers |
-|-------|----------------|
-| Unit | pure logic, crypto primitives, parsers |
-| Integration | database, RPC, service boundaries |
-| End-to-end | full scenarios against Stellar testnet |
+| Layer       | What it covers                         |
+| ----------- | -------------------------------------- |
+| Unit        | pure logic, crypto primitives, parsers |
+| Integration | database, RPC, service boundaries      |
+| End-to-end  | full scenarios against Stellar testnet |
 
 **Requirements:**
 

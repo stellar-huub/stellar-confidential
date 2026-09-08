@@ -54,7 +54,11 @@ describe('encrypt/decrypt', () => {
   });
 
   it('encrypts to a public viewing key the holder can read', () => {
-    const ciphertext = encryptAmount(777n, { kind: 'viewing-public', publicKey: viewing.publicKey }, rng);
+    const ciphertext = encryptAmount(
+      777n,
+      { kind: 'viewing-public', publicKey: viewing.publicKey },
+      rng,
+    );
     assert.equal(decryptAmount(ciphertext, viewing), 777n);
   });
 
@@ -62,11 +66,14 @@ describe('encrypt/decrypt', () => {
     const other = deriveKeyset(hexToBytes('44'.repeat(32))).viewing;
     const ciphertext = encryptAmount(500n, viewing, rng);
     // Invariant 3: an error, never a plausible wrong number.
-    assert.throws(() => decryptAmount(ciphertext, other), (error: unknown) => {
-      assert.ok(error instanceof CryptoError);
-      assert.equal(error.code, 'DECRYPT_OUT_OF_RANGE');
-      return true;
-    });
+    assert.throws(
+      () => decryptAmount(ciphertext, other),
+      (error: unknown) => {
+        assert.ok(error instanceof CryptoError);
+        assert.equal(error.code, 'DECRYPT_OUT_OF_RANGE');
+        return true;
+      },
+    );
   });
 
   it('rejects malformed ciphertexts', () => {
@@ -79,7 +86,10 @@ describe('homomorphic accumulation', () => {
   it('adds without a key', () => {
     const a = encryptAmount(300n, viewing, rng);
     const b = encryptAmount(45n, viewing, rng);
-    assert.equal(decryptAmount(addAmounts(a, b), viewing, { maxAbsLimb: DEFAULT_BALANCE_BOUND }), 345n);
+    assert.equal(
+      decryptAmount(addAmounts(a, b), viewing, { maxAbsLimb: DEFAULT_BALANCE_BOUND }),
+      345n,
+    );
   });
 
   it('subtracts without a key', () => {

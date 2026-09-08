@@ -33,33 +33,44 @@ Full vision: [README.md](README.md). Delivery plan: [MILESTONES.md](MILESTONES.m
 
 ## Current state
 
-**Phase 0 — Foundations, in progress.**
-
-The repository today contains documentation and a pitch deck. **No application code exists yet.** Do not assume otherwise; do not describe unbuilt components as if they work.
+**Phases 1 and 2 are implemented and tested. Phase 0 is complete except for governance files.**
 
 ```text
 .
-├── README.md          # vision, architecture, roadmap
-├── MILESTONES.md      # delivery plan, acceptance criteria, open decisions
-├── CONTRIBUTING.md    # contribution guide
-├── CLAUDE.md          # this file
-└── pitch/             # pitch film (see below)
+├── packages/
+│   ├── core/        event model, cursors, typed errors, Merkle digests, logger
+│   ├── crypto/      twisted ElGamal amounts, key derivation, frozen test vectors
+│   ├── indexer/     RPC client, ingestion pipeline, stores, cache, integrity
+│   └── recovery/    replay engine, checkpoints, verification, event sources
+├── services/
+│   ├── indexer/     archive HTTP + WebSocket API, ingestion process
+│   └── recovery/    recovery session coordination
+├── examples/end-to-end/   `pnpm demo` — the whole stack in one script
+├── docs/            events.md, operations.md, threat-model.md, adr/
+└── pitch/           pitch film (not product code)
 ```
 
-The next concrete work is milestones **M0.1–M0.4**: monorepo scaffolding, CI, governance files, and a local Docker stack. Nothing downstream can start until those land.
+**Test coverage:** 205 unit tests and 28 integration tests, all passing. Integration tests need PostgreSQL, Redis and a Stellar RPC node, and skip cleanly without them.
+
+**What is not done:**
+
+- **M0.3** — licence, `SECURITY.md`, `CODE_OF_CONDUCT.md`, issue/PR templates.
+- **M1.6** — a public testnet deployment and seven days of uptime. The service is Dockerised and has a runbook; nothing is deployed.
+- **The contract mapping.** The canonical Confidential Token event surface is still unknown. Everything is built against a documented working spec behind a `ContractAdapter`, and the six open items are listed in `docs/events.md`. **Do not describe the adapter as canonical.**
+- Browser and mobile targets (Phase 6), multi-provider archives (Phase 3), the SDK (Phase 4).
 
 ### The `pitch/` directory
 
 A self-contained, deterministic pitch film. It is not part of the product and shares no code with it.
 
-| File | Role |
-|------|------|
-| `script.json` | Narration source of truth. TTS and the deck both read it. |
-| `voiceover.py` | Synthesizes narration per line (Piper TTS) → `vo/*.wav` + `timeline.json` |
-| `timeline.json` | Per-line start/end times; the deck keys visual beats off these |
-| `deck.html` | The film itself. Deterministic: `SEEK(t)` fully determines the pixels |
-| `render.py` | Walks the frame grid, pipes screenshots into ffmpeg → `out/picture.mp4` |
-| `fonts/`, `vo/` | Bundled fonts and rendered narration |
+| File            | Role                                                                      |
+| --------------- | ------------------------------------------------------------------------- |
+| `script.json`   | Narration source of truth. TTS and the deck both read it.                 |
+| `voiceover.py`  | Synthesizes narration per line (Piper TTS) → `vo/*.wav` + `timeline.json` |
+| `timeline.json` | Per-line start/end times; the deck keys visual beats off these            |
+| `deck.html`     | The film itself. Deterministic: `SEEK(t)` fully determines the pixels     |
+| `render.py`     | Walks the frame grid, pipes screenshots into ffmpeg → `out/picture.mp4`   |
+| `fonts/`, `vo/` | Bundled fonts and rendered narration                                      |
 
 The picture is cut to the voice, not the other way round. Change `script.json` → re-run `voiceover.py` → re-run `render.py`.
 
@@ -87,30 +98,20 @@ Recovery engine   (replay, verification, state reconstruction)
 Stellar   (Confidential Token contracts, Soroban)
 ```
 
-### Target repository structure
+### Still to be created
 
-Not yet created. Establish it in M0.1 and keep this list accurate as it fills in.
-
-```text
-packages/    sdk/ indexer/ recovery/ crypto/ api/
-apps/        explorer/ auditor/ payroll-demo/
-services/    indexer/ recovery/ api/
-contracts/   Soroban contracts and bindings
-docs/        specs, ADRs, runbooks
-examples/    runnable integration examples
-pitch/       pitch film (not product code)
-```
+`packages/sdk` (Phase 4), `packages/api` shared types, `apps/explorer`, `apps/auditor`, `apps/payroll-demo`, `contracts/`. Create a package when a milestone calls for it, not before.
 
 ### Planned stack
 
-| Layer | Choice |
-|-------|--------|
-| Chain | Stellar, Soroban, Confidential Token contracts, Stellar RPC |
-| Backend | Node.js, TypeScript, PostgreSQL, Redis |
-| API | REST + WebSocket |
-| SDK | TypeScript, browser support, WebAssembly, mobile bindings |
-| Infra | Docker, cloud deployment, self-hosted archive nodes |
-| Monorepo | pnpm workspaces + Turborepo *(proposed — open decision #2)* |
+| Layer    | Choice                                                                                          |
+| -------- | ----------------------------------------------------------------------------------------------- |
+| Chain    | Stellar, Soroban, Confidential Token contracts, Stellar RPC                                     |
+| Backend  | Node.js, TypeScript, PostgreSQL, Redis                                                          |
+| API      | REST + WebSocket                                                                                |
+| SDK      | TypeScript, browser support, WebAssembly, mobile bindings                                       |
+| Infra    | Docker, cloud deployment, self-hosted archive nodes                                             |
+| Monorepo | pnpm workspaces + TypeScript project references ([ADR-0001](docs/adr/0001-monorepo-tooling.md)) |
 
 ---
 
@@ -120,7 +121,7 @@ These are not style preferences. Violating one is a correctness or security bug.
 
 1. **Spend keys never leave the client.** Not to a server, not into a log line, not into an error message, not into a test fixture. Viewing keys and spend keys are derived independently.
 2. **Viewing ≠ controlling.** An authorized auditor must be cryptographically unable to spend. Enforced by key separation and covered by a negative test, never by policy alone.
-3. **Never return a silently wrong balance.** A typed error always beats a plausible wrong number. Recovery must distinguish *missing events* from *wrong key* from *stale index*.
+3. **Never return a silently wrong balance.** A typed error always beats a plausible wrong number. Recovery must distinguish _missing events_ from _wrong key_ from _stale index_.
 4. **Recovered state must be verifiable.** Clients verify against on-chain data rather than trusting an archive database. A tampering or truncating provider must be detectable.
 5. **Replay is deterministic.** The same event set replayed twice yields identical state; a checkpoint replay matches a full replay.
 6. **Ingestion is idempotent.** Re-ingesting a ledger produces no duplicates; reorgs roll back cleanly.
@@ -136,7 +137,7 @@ Full detail in [CONTRIBUTING.md](CONTRIBUTING.md). The short version:
 - **TypeScript strict**; `any` requires a justifying comment; named exports only in libraries
 - **Typed errors** with codes and structured context — never a bare `Error('failed')`
 - **Naming**: `camelCase` values, `PascalCase` types, `SCREAMING_SNAKE_CASE` constants and error codes, `kebab-case` filenames, spelled out (`ledgerSequence`, not `ls`)
-- **Comments** explain *why*; crypto and consensus-adjacent code additionally states the invariant and cites the spec
+- **Comments** explain _why_; crypto and consensus-adjacent code additionally states the invariant and cites the spec
 - **Logging** structured, never key material, seed phrases, decrypted amounts, or full ciphertexts
 - **Commits** follow Conventional Commits: `feat(indexer): handle ledger reorgs during live follow`
 - **Branches**: `feat/…`, `fix/…`, `docs/…`, `chore/…`, `refactor/…`, `test/…`
@@ -147,32 +148,44 @@ Full detail in [CONTRIBUTING.md](CONTRIBUTING.md). The short version:
 
 ## Commands
 
-⚠️ Most of these are **not wired up yet** — making them real is Phase 0. Verify before quoting them to a user as working.
+All of these work.
 
 ```bash
-pnpm install        # install workspace dependencies      [M0.1 — not yet]
-pnpm build          # build all packages                  [M0.1 — not yet]
-pnpm test           # run test suite                      [M0.1 — not yet]
-pnpm lint           # ESLint                              [M0.1 — not yet]
-pnpm typecheck      # tsc --noEmit                        [M0.1 — not yet]
-pnpm dev            # local stack                         [M0.4 — not yet]
-docker compose up -d  # PostgreSQL + Redis                [M0.4 — not yet]
+pnpm install
+pnpm build            # tsc --build across the project graph
+pnpm test             # 205 unit tests (node:test via tsx)
+pnpm test:integration # 28 tests; needs PostgreSQL, Redis, Stellar RPC
+pnpm lint             # ESLint, clean
+pnpm typecheck
+pnpm dev              # indexer: ingestion + archive API on :4000
+pnpm demo             # end-to-end walkthrough, no infrastructure needed
+pnpm migrate          # apply schema migrations
+
+node --import tsx packages/crypto/scripts/benchmark.ts        # cost baseline
+node --import tsx packages/crypto/scripts/generate-vectors.ts # regenerate vectors (breaking!)
 ```
 
-Working today, in `pitch/`: `./voiceover.py`, `./render.py`.
+Integration tests default to a local PostgreSQL over the unix socket. Over TCP a password is required:
 
----
+```bash
+STELLAR_CONFIDENTIAL_INTEGRATION=1 \
+  DATABASE_URL="postgresql:///stellar_confidential_test?host=/var/run/postgresql" \
+  pnpm test:integration
+```
+
+In `pitch/`: `./voiceover.py`, `./render.py`.
 
 ## Guidance for assistants
 
-**Before answering questions about this codebase:** check what actually exists. The README and this file describe a great deal that is planned. Read the filesystem before asserting that a package, service, or command exists.
+**Before answering questions about this codebase:** check what actually exists. The README describes a great deal that is planned; Phases 1 and 2 are built, Phases 3–7 are not. Read the filesystem before asserting that a package, service, or command exists.
 
 **When implementing:**
 
 - Work against a named milestone in [MILESTONES.md](MILESTONES.md); acceptance criteria there are the definition of done
 - Respect the [invariants](#invariants) — they outrank convenience, brevity, and test-passing
 - Do not scaffold speculative structure. Create a package when a milestone calls for it.
-- Do not invent Confidential Token contract APIs. If the event surface or contract interface is unknown, that is milestone M1.1 research, not something to guess. Say so.
+- Do not invent Confidential Token contract APIs. The event surface is still a working spec; changes belong in a `ContractAdapter` and in `docs/events.md` § Open items, never spread downstream.
+- Performance work on decryption should start from `packages/crypto/scripts/benchmark.ts`, not from intuition. Scalar multiplication dominates; the discrete-log table size is already tuned and documented.
 - Prefer typed errors over defensive fallbacks in anything touching balances or keys
 
 **When finishing any change:** update this file (see the maintenance rule at the top), tick the relevant criteria in `MILESTONES.md`, and add the Change Log entry. This is not optional bookkeeping — it is how the next session avoids re-deriving what you already worked out.
@@ -185,10 +198,17 @@ Working today, in `pitch/`: `./voiceover.py`, `./render.py`.
 
 Record decisions here as they are settled, with the reasoning. Non-obvious technical decisions also get an ADR in `docs/adr/`.
 
-| Date | Decision | Reasoning |
-|------|----------|-----------|
-| 2026-09-07 | `MILESTONES.md` is the single source of truth for scope and sequencing | The README's roadmap is prose for readers; delivery needs testable acceptance criteria |
-| 2026-09-07 | Every phase must end in something runnable | Prevents design-only phases that cannot be validated |
+| Date       | Decision                                                               | Reasoning                                                                                                                                            |
+| ---------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-09-07 | `MILESTONES.md` is the single source of truth for scope and sequencing | The README's roadmap is prose for readers; delivery needs testable acceptance criteria                                                               |
+| 2026-09-07 | Every phase must end in something runnable                             | Prevents design-only phases that cannot be validated                                                                                                 |
+| 2026-09-08 | pnpm workspaces + TypeScript project references, no task runner        | Small all-TypeScript build graph; `tsc --build` handles it correctly with no extra dependency ([ADR-0001](docs/adr/0001-monorepo-tooling.md))        |
+| 2026-09-08 | Contract knowledge confined to a `ContractAdapter`                     | Lets Phases 1–2 be built and tested in full while the canonical contract surface is unknown ([ADR-0002](docs/adr/0002-contract-adapter-boundary.md)) |
+| 2026-09-08 | Ingestion commits a whole ledger window atomically                     | Makes restart correctness a property of the schema rather than of careful sequencing ([ADR-0003](docs/adr/0003-ledger-window-atomicity.md))          |
+| 2026-09-08 | Amounts carried as four 16-bit limbs, independent randomness each      | Makes decryption tractable on a phone; shared randomness would leak limb differences ([ADR-0004](docs/adr/0004-limbed-amounts.md))                   |
+| 2026-09-08 | Replay tracks ciphertext and plaintext balances together               | Makes chain verification constant work instead of a wide discrete-log search ([ADR-0005](docs/adr/0005-two-balances-in-replay.md))                   |
+| 2026-09-08 | `node:test` via `tsx` rather than a test framework                     | Keeps the test toolchain to one dependency                                                                                                           |
+| 2026-09-08 | Redis spoken directly over RESP                                        | Four commands is less code than the client library, and narrows the trusted surface of a service handling confidential data                          |
 
 Open decisions still needing a call are listed in [MILESTONES.md](MILESTONES.md) § Open decisions — license, monorepo tooling, API style, package scope, archive incentive model, mobile target.
 
@@ -197,6 +217,25 @@ Open decisions still needing a call are listed in [MILESTONES.md](MILESTONES.md)
 ## Change Log
 
 Newest first. One entry per merged change. Include what changed and why it matters to someone reading this file later.
+
+### 2026-09-08 — Phases 1 and 2 implemented
+
+Built the confidential indexer and the state recovery engine, plus the Phase 0 foundations they needed. 205 unit tests and 28 integration tests, all passing; lint and build clean.
+
+**Packages.** `core` (event model, cursor ordering, typed errors, Merkle digests, redacting logger), `crypto` (twisted ElGamal over ristretto255, HKDF key separation, frozen test vectors, benchmark), `indexer` (RPC client, ingestion pipeline, PostgreSQL and in-memory stores behind one conformance suite, RESP Redis cache, integrity service, reference adapter, synthetic chain), `recovery` (replay engine, checkpoints, verification, event sources).
+
+**Services.** Archive HTTP + WebSocket API with OpenAPI; recovery session coordination.
+
+**Docs.** `events.md` (M1.1's deliverable), `operations.md`, `threat-model.md`, five ADRs.
+
+**Four bugs worth remembering, all found by tests against real infrastructure:**
+
+1. `getLedgers` returns a `LedgerHeaderHistoryEntry`, not a bare `LedgerHeader` — different offsets. Misreading it produced parent hashes that never match, which would have disabled reorg detection _silently_. Found by a live-node integration test; the parser now cross-checks the embedded hash.
+2. `rollbackTo` left checkpoints pointing above deleted ledgers, so the next ingest resumed past a hole. Both stores now clamp, and the conformance suite pins it.
+3. `verifyAmount` compared limbs one by one against the canonical split, rejecting correct accumulated balances — homomorphic addition does not propagate carries. It now recombines by weight.
+4. The recovery session asked for a digest over the range the _archive returned_, letting an archive truncate a history and produce a digest agreeing with the truncation. Digest bounds are now client-chosen and exclusive-lower, matching pagination.
+
+**Two known limits, stated plainly:** the contract mapping is a working spec (six open items in `docs/events.md`), and transaction-graph/timing privacy is unaddressed — confidential amounts are not confidential relationships, which for payroll matters.
 
 ### 2026-09-07 — Project documentation foundation
 

@@ -1,8 +1,10 @@
-import { IndexerError, silentLogger, type JsonValue, type Logger } from '@stellar-confidential/core';
 import {
-  parseLedgerHeaderHistoryEntryPrefix,
-  parseLedgerHeaderPrefix,
-} from './ledger-header.js';
+  IndexerError,
+  silentLogger,
+  type JsonValue,
+  type Logger,
+} from '@stellar-confidential/core';
+import { parseLedgerHeaderHistoryEntryPrefix, parseLedgerHeaderPrefix } from './ledger-header.js';
 
 /**
  * Stellar RPC client.
@@ -238,8 +240,7 @@ export class StellarRpc implements StellarRpcLike {
     const result = asRecord(await this.call('getLatestLedger', {}), 'getLatestLedger');
     const headerXdr = result['headerXdr'];
     // getLatestLedger returns a bare LedgerHeader, unlike getLedgers.
-    const header =
-      typeof headerXdr === 'string' ? parseLedgerHeaderPrefix(headerXdr) : null;
+    const header = typeof headerXdr === 'string' ? parseLedgerHeaderPrefix(headerXdr) : null;
     return {
       sequence: asNumber(result['sequence'], 'sequence'),
       hash: asString(result['id'], 'id'),
@@ -273,7 +274,11 @@ export class StellarRpc implements StellarRpcLike {
         throw new IndexerError(
           'RPC_PROTOCOL',
           'ledger header does not commit to the reported ledger hash',
-          { sequence: asNumber(ledger['sequence'], 'sequence'), reported: hash, embedded: prefix.hash },
+          {
+            sequence: asNumber(ledger['sequence'], 'sequence'),
+            reported: hash,
+            embedded: prefix.hash,
+          },
         );
       }
 

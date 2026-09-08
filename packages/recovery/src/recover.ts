@@ -152,7 +152,12 @@ export class RecoverySession {
 
       if (page.events.length === 0) break;
 
-      this.state = replay(this.state, page.events, this.options.viewingKey, this.options.replayOptions);
+      this.state = replay(
+        this.state,
+        page.events,
+        this.options.viewingKey,
+        this.options.replayOptions,
+      );
       this.logger.debug('page applied', {
         events: page.events.length,
         cursor: this.state.lastCursor,

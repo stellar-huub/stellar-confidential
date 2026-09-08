@@ -39,7 +39,10 @@ describe('RedisCache', { skip: skipUnlessIntegration() }, () => {
     const keys = Array.from({ length: 20 }, (_, i) => `sc-test-concurrent:${i}`);
     await Promise.all(keys.map((key, i) => client.set(key, String(i), 30)));
     const values = await Promise.all(keys.map((key) => client.get(key)));
-    assert.deepEqual(values, keys.map((_, i) => String(i)));
+    assert.deepEqual(
+      values,
+      keys.map((_, i) => String(i)),
+    );
     await Promise.all(keys.map((key) => client.delete(key)));
   });
 

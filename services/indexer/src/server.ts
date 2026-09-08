@@ -12,14 +12,7 @@ import {
   type Logger,
 } from '@stellar-confidential/core';
 import type { EventStore, IntegrityService } from '@stellar-confidential/indexer';
-import {
-  RateLimiter,
-  clientKey,
-  optionalParam,
-  parseLimit,
-  sendError,
-  sendJson,
-} from './http.js';
+import { RateLimiter, clientKey, optionalParam, parseLimit, sendError, sendJson } from './http.js';
 import { openApiDocument } from './openapi.js';
 
 /**
@@ -120,7 +113,9 @@ export class ApiServer {
     const value = optionalParam(url, name);
     if (value === undefined) return fallback;
     if (!isCursor(value)) {
-      throw new ValidationError('INVALID_REQUEST', `${name} is not a valid cursor`, { [name]: value });
+      throw new ValidationError('INVALID_REQUEST', `${name} is not a valid cursor`, {
+        [name]: value,
+      });
     }
     return value;
   }

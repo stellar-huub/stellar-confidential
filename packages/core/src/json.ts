@@ -1,5 +1,6 @@
 /** The subset of JSON we accept from adapters and store verbatim. */
-export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+export type JsonValue =
+  string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
 
 /**
  * Deterministic JSON: object keys sorted, no insignificant whitespace.

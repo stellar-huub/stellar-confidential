@@ -1,5 +1,9 @@
 import { hexToBytes } from '@noble/hashes/utils.js';
-import { encodeCursor, type ConfidentialEvent, type EncryptedAmount } from '@stellar-confidential/core';
+import {
+  encodeCursor,
+  type ConfidentialEvent,
+  type EncryptedAmount,
+} from '@stellar-confidential/core';
 import {
   ZERO_AMOUNT,
   addAmounts,

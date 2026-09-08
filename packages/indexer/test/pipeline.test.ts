@@ -53,7 +53,12 @@ function buildChain(ledgers = 20): SyntheticChain {
       });
     }
     if (i % 5 === 0) {
-      specs.push({ type: 'deposit', account: ALICE, amount: amount(`d${i}`), publicAmount: '1000' });
+      specs.push({
+        type: 'deposit',
+        account: ALICE,
+        amount: amount(`d${i}`),
+        publicAmount: '1000',
+      });
     }
     chain.appendLedger(specs);
   }
@@ -176,7 +181,13 @@ describe('ingestion pipeline', () => {
     const chain = new SyntheticChain();
     chain.appendLedger([
       { type: 'deposit', account: ALICE, amount: amount('ok'), publicAmount: '5' },
-      { type: 'deposit', account: ALICE, amount: amount('no'), publicAmount: '9', successful: false },
+      {
+        type: 'deposit',
+        account: ALICE,
+        amount: amount('no'),
+        publicAmount: '9',
+        successful: false,
+      },
     ]);
     await makeIngestor(chain, store).runOnce();
 
@@ -187,7 +198,9 @@ describe('ingestion pipeline', () => {
 
   it('ignores contract events it does not recognise', async () => {
     const chain = new SyntheticChain();
-    chain.appendLedger([{ type: 'deposit', account: ALICE, amount: amount('d1'), publicAmount: '1' }]);
+    chain.appendLedger([
+      { type: 'deposit', account: ALICE, amount: amount('d1'), publicAmount: '1' },
+    ]);
     const unrecognised = {
       getLedgerRange: () => chain.getLedgerRange(),
       getLedgers: (start: number, limit: number) => chain.getLedgers(start, limit),
@@ -214,7 +227,9 @@ describe('ingestion pipeline', () => {
   it('detects a reorg, rolls back, and re-ingests the replacement history', async () => {
     const chain = new SyntheticChain();
     for (let i = 1; i <= 6; i += 1) {
-      chain.appendLedger([{ type: 'deposit', account: ALICE, amount: amount(`o${i}`), publicAmount: String(i) }]);
+      chain.appendLedger([
+        { type: 'deposit', account: ALICE, amount: amount(`o${i}`), publicAmount: String(i) },
+      ]);
     }
     const ingestor = makeIngestor(chain, store, 10);
     await ingestor.runOnce();

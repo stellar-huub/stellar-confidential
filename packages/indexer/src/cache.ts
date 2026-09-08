@@ -145,9 +145,9 @@ export class RedisCache implements Cache {
       }
       // Any other reply type means we sent a command this client does not model.
       this.buffer = this.buffer.subarray(end + 2);
-      this.pending.shift()?.reject(
-        new IndexerError('STORAGE_FAILURE', `unsupported redis reply type ${type}`),
-      );
+      this.pending
+        .shift()
+        ?.reject(new IndexerError('STORAGE_FAILURE', `unsupported redis reply type ${type}`));
     }
   }
 

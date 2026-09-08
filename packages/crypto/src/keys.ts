@@ -108,7 +108,11 @@ export function sign(key: SpendKey, message: Uint8Array): string {
   return bytesToHex(ed25519.sign(message, key.secret));
 }
 
-export function verifySignature(publicKey: string, message: Uint8Array, signature: string): boolean {
+export function verifySignature(
+  publicKey: string,
+  message: Uint8Array,
+  signature: string,
+): boolean {
   try {
     return ed25519.verify(hexToBytes(signature), message, hexToBytes(publicKey));
   } catch {

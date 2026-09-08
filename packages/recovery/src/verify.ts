@@ -217,11 +217,15 @@ export function verifyEventIntegrity(
   const problems = verifyAgainstDigest(events, digest);
   if (problems.length === 0) return;
 
-  throw new RecoveryError('INTEGRITY_FAILURE', 'events do not match the digest the archive published', {
-    source: sourceId,
-    problems: problems.map((problem) => problem.kind).join(','),
-    expectedCount: digest.eventCount,
-    actualCount: events.length,
-    expectedRoot: digest.merkleRoot,
-  });
+  throw new RecoveryError(
+    'INTEGRITY_FAILURE',
+    'events do not match the digest the archive published',
+    {
+      source: sourceId,
+      problems: problems.map((problem) => problem.kind).join(','),
+      expectedCount: digest.eventCount,
+      actualCount: events.length,
+      expectedRoot: digest.merkleRoot,
+    },
+  );
 }

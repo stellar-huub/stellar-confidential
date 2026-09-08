@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": { "start": "node --import tsx demo.ts" },
+  "scripts": {
+    "start": "node --import tsx demo.ts"
+  },
   "dependencies": {
     "@stellar-confidential/core": "workspace:*",
     "@stellar-confidential/crypto": "workspace:*",

@@ -40,7 +40,11 @@ services:
     ports:
       - '8000:8000'
     healthcheck:
-      test: ['CMD-SHELL', 'curl -sf http://localhost:8000/rpc -X POST -H "Content-Type: application/json" -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getHealth\"}" || exit 1']
+      test:
+        [
+          'CMD-SHELL',
+          'curl -sf http://localhost:8000/rpc -X POST -H "Content-Type: application/json" -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getHealth\"}" || exit 1',
+        ]
       interval: 10s
       timeout: 5s
       retries: 30

@@ -36,7 +36,6 @@ import {
 import { ApiServer } from '@stellar-confidential/service-indexer';
 import type { EncryptedAmount } from '@stellar-confidential/core';
 
-const COMPANY = 'GCOMPANY';
 const EMPLOYEES = ['GAYODELE', 'GBEATRIZ', 'GCHIDI'] as const;
 const PAYROLL_RUNS = 12;
 
@@ -72,7 +71,12 @@ async function main(): Promise<void> {
       const keys = keysets.get(employee)!;
       const salary = BigInt(25_000_000 + index * 7_000_000 + (run % 3) * 1_100_000);
       const cipher = encryptAmount(salary, keys.viewing, undefined);
-      specs.push({ type: 'deposit', account: employee, amount: cipher, publicAmount: salary.toString() });
+      specs.push({
+        type: 'deposit',
+        account: employee,
+        amount: cipher,
+        publicAmount: salary.toString(),
+      });
 
       const current = expected.get(employee)!;
       expected.set(employee, {

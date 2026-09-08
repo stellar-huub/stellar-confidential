@@ -1,6 +1,12 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
 import { randomUUID } from 'node:crypto';
-import { CURSOR_MAX, ValidationError, isCursor, silentLogger, type Logger } from '@stellar-confidential/core';
+import {
+  CURSOR_MAX,
+  ValidationError,
+  isCursor,
+  silentLogger,
+  type Logger,
+} from '@stellar-confidential/core';
 import type { EventStore } from '@stellar-confidential/indexer';
 
 /**
@@ -125,7 +131,10 @@ export class RecoveryServer {
       throw new ValidationError('INVALID_REQUEST', 'account is required');
     }
     const fromCursorRaw = record['fromCursor'];
-    if (fromCursorRaw !== undefined && (typeof fromCursorRaw !== 'string' || !isCursor(fromCursorRaw))) {
+    if (
+      fromCursorRaw !== undefined &&
+      (typeof fromCursorRaw !== 'string' || !isCursor(fromCursorRaw))
+    ) {
       throw new ValidationError('INVALID_REQUEST', 'fromCursor is not a valid cursor');
     }
 
@@ -198,7 +207,8 @@ export class RecoveryServer {
         const id = url.searchParams.get('session');
         if (id === null) throw new ValidationError('INVALID_REQUEST', 'session is required');
         const session = this.sessions.get(id);
-        if (session === undefined) throw new ValidationError('NOT_FOUND', 'unknown session', { id });
+        if (session === undefined)
+          throw new ValidationError('NOT_FOUND', 'unknown session', { id });
 
         const latest = await this.options.store.getLatestLedger();
         session.archiveLedger = latest?.sequence ?? 0;

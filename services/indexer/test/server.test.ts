@@ -1,7 +1,11 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { WebSocket } from 'ws';
-import { verifyAgainstDigest, type ConfidentialEvent, type RangeDigest } from '@stellar-confidential/core';
+import {
+  verifyAgainstDigest,
+  type ConfidentialEvent,
+  type RangeDigest,
+} from '@stellar-confidential/core';
 import {
   Ingestor,
   IntegrityService,
@@ -39,7 +43,12 @@ describe('archive API', () => {
         });
       }
       if (i % 4 === 0) {
-        specs.push({ type: 'deposit', account: ALICE, amount: amount(`d${i}`), publicAmount: '100' });
+        specs.push({
+          type: 'deposit',
+          account: ALICE,
+          amount: amount(`d${i}`),
+          publicAmount: '100',
+        });
       }
       chain.appendLedger(specs);
     }
@@ -87,7 +96,10 @@ describe('archive API', () => {
     const second = await get(`/events?limit=100&after=${first.body['nextCursor'] as string}`);
     const more = second.body['events'] as ConfidentialEvent[];
     // No overlap between pages.
-    assert.equal(more.some((event) => cursors.includes(event.cursor)), false);
+    assert.equal(
+      more.some((event) => cursors.includes(event.cursor)),
+      false,
+    );
   });
 
   it('filters an account history', async () => {
@@ -148,7 +160,9 @@ describe('archive API', () => {
 
     // Attach the handler before waiting on open: the server acknowledges the
     // subscription immediately, so a listener added afterwards races it.
-    socket.on('message', (data) => messages.push(JSON.parse(String(data)) as Record<string, unknown>));
+    socket.on('message', (data) =>
+      messages.push(JSON.parse(String(data)) as Record<string, unknown>),
+    );
     await new Promise<void>((resolve, reject) => {
       socket.on('open', () => resolve());
       socket.on('error', reject);

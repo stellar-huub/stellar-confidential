@@ -180,7 +180,10 @@ describe('StellarRpc', () => {
     });
     await rpc.getHealth();
     await rpc.getHealth();
-    assert.ok(waits.some((wait) => wait > 0), 'expected the second call to be spaced out');
+    assert.ok(
+      waits.some((wait) => wait > 0),
+      'expected the second call to be spaced out',
+    );
   });
 
   it('rejects a ledger whose header does not commit to the reported hash', async () => {

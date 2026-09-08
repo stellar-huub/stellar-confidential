@@ -42,9 +42,7 @@ export interface SyntheticLedger {
 export const DEFAULT_CONTRACT_ID = 'CSYNTHETIC00000000000000000000000000000000000000000000';
 
 function hashFor(sequence: number, epoch: number, previousHash: string): string {
-  return createHash('sha256')
-    .update(`${sequence}:${epoch}:${previousHash}`)
-    .digest('hex');
+  return createHash('sha256').update(`${sequence}:${epoch}:${previousHash}`).digest('hex');
 }
 
 function bodyFor(spec: SyntheticEventSpec): JsonValue {

@@ -1,6 +1,11 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { CURSOR_MAX, CURSOR_MIN, encodeCursor, type ConfidentialEvent } from '@stellar-confidential/core';
+import {
+  CURSOR_MAX,
+  CURSOR_MIN,
+  encodeCursor,
+  type ConfidentialEvent,
+} from '@stellar-confidential/core';
 import type { EventStore, LedgerRecord } from '../src/store.js';
 
 /**
@@ -110,12 +115,17 @@ export function runStoreConformance(name: string, create: () => Promise<EventSto
     it('filters by account, contract and type', async () => {
       await store.append({
         ledgers: [makeLedger(12, 1)],
-        events: [makeEvent(12, 0, { account: 'GCAROL', contractId: 'CONTRACT_B', type: 'deposit' })],
+        events: [
+          makeEvent(12, 0, { account: 'GCAROL', contractId: 'CONTRACT_B', type: 'deposit' }),
+        ],
         checkpoint: { name: 'primary', cursor: 'c2', ledgerSequence: 12 },
       });
 
       assert.equal((await store.getEvents({ account: 'GCAROL', limit: 10 })).events.length, 1);
-      assert.equal((await store.getEvents({ contractId: 'CONTRACT_B', limit: 10 })).events.length, 1);
+      assert.equal(
+        (await store.getEvents({ contractId: 'CONTRACT_B', limit: 10 })).events.length,
+        1,
+      );
       assert.equal((await store.getEvents({ types: ['deposit'], limit: 10 })).events.length, 1);
       assert.equal((await store.getEvents({ types: ['withdraw'], limit: 10 })).events.length, 0);
       assert.equal(await store.countEvents({ account: 'GALICE' }), 3);
@@ -141,7 +151,10 @@ export function runStoreConformance(name: string, create: () => Promise<EventSto
       const from = events[1]!.cursor;
       const to = events[2]!.cursor;
       const ranged = await collect(store, from, to);
-      assert.deepEqual(ranged.map((event) => event.cursor), [from, to]);
+      assert.deepEqual(
+        ranged.map((event) => event.cursor),
+        [from, to],
+      );
     });
 
     it('summarises an account', async () => {

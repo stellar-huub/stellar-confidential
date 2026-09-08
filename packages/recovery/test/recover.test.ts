@@ -106,7 +106,10 @@ describe('RecoverySession', () => {
     await assert.rejects(
       () =>
         session.sync({
-          from: { ...(result.checkpoint as NonNullable<typeof result.checkpoint>), account: 'GOTHER' },
+          from: {
+            ...(result.checkpoint as NonNullable<typeof result.checkpoint>),
+            account: 'GOTHER',
+          },
         }),
       (error: unknown) => {
         assert.ok(error instanceof RecoveryError);
@@ -158,7 +161,8 @@ describe('RecoverySession', () => {
     let digestCalls = 0;
     const lying: EventSource = {
       id: 'lying-archive',
-      fetchAccountEvents: (request) => new MemoryEventSource(history.events).fetchAccountEvents(request),
+      fetchAccountEvents: (request) =>
+        new MemoryEventSource(history.events).fetchAccountEvents(request),
       fetchDigest: async (request) => {
         digestCalls += 1;
         // A digest for a different range than the events served.
@@ -279,10 +283,13 @@ describe('the archive never receives key material (invariant 1)', () => {
       const url = new URL(String(input));
       traffic.push(url.toString());
       if (init?.body !== undefined && init.body !== null) traffic.push(String(init.body));
-      for (const [key, value] of Object.entries(init?.headers ?? {})) traffic.push(`${key}: ${value}`);
+      for (const [key, value] of Object.entries(init?.headers ?? {}))
+        traffic.push(`${key}: ${value}`);
 
       if (url.pathname.endsWith('/health')) {
-        return new Response(JSON.stringify({ latestLedger: history.latestLedger }), { status: 200 });
+        return new Response(JSON.stringify({ latestLedger: history.latestLedger }), {
+          status: 200,
+        });
       }
       if (url.pathname.endsWith('/digest')) {
         const digest = await backing.fetchDigest({

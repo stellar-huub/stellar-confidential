@@ -171,11 +171,7 @@ export function decryptAmount(
  * weighted sum is invariant to how the value is distributed across limbs, so it
  * verifies a freshly encrypted amount and a long-accumulated balance alike.
  */
-export function verifyAmount(
-  amount: EncryptedAmount,
-  key: ViewingKey,
-  expected: bigint,
-): boolean {
+export function verifyAmount(amount: EncryptedAmount, key: ViewingKey, expected: bigint): boolean {
   if (expected < 0n) return false;
 
   let combined = IDENTITY;

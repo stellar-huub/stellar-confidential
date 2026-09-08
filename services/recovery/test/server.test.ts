@@ -95,11 +95,16 @@ describe('recovery coordination API', () => {
   it('validates its inputs', async () => {
     assert.equal((await post('/recovery/session', {})).status, 400);
     assert.equal((await post('/recovery/session', { account: '' })).status, 400);
-    assert.equal((await post('/recovery/session', { account: ALICE, fromCursor: 'nope' })).status, 400);
+    assert.equal(
+      (await post('/recovery/session', { account: ALICE, fromCursor: 'nope' })).status,
+      400,
+    );
   });
 
   it('404s an unknown session', async () => {
-    const response = await fetch(`${base}/recovery/status?session=00000000-0000-0000-0000-000000000000`);
+    const response = await fetch(
+      `${base}/recovery/status?session=00000000-0000-0000-0000-000000000000`,
+    );
     assert.equal(response.status, 404);
   });
 

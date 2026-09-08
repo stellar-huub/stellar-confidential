@@ -547,7 +547,11 @@ Areas that will be particularly useful include:
 * security research
 * developer documentation
 
-Before contributing, please read the project contribution guidelines once they are available.
+Before contributing, please read [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Current, actionable work is tracked in [MILESTONES.md](MILESTONES.md) — Phase 0 milestones are deliberately approachable and require no cryptography background.
+
+Contributors and AI assistants should also read [CLAUDE.md](CLAUDE.md), which carries the project's working conventions and invariants and is updated with every change.
 
 ---
 

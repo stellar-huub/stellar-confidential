@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { StellarRpc } from '../src/rpc.js';
-import { STELLAR_RPC_URL, skipUnlessIntegration } from './integration-config.js';
+import { STELLAR_RPC_URL, skipUnlessLiveRpc } from './integration-config.js';
 
 /**
  * Against a live Stellar node.
@@ -10,7 +10,7 @@ import { STELLAR_RPC_URL, skipUnlessIntegration } from './integration-config.js'
  * shapes we parse are the shapes a real node emits, and that our ledger-header
  * parsing agrees with the node's own hashes.
  */
-describe('StellarRpc against a live node', { skip: skipUnlessIntegration() }, () => {
+describe('StellarRpc against a live node', { skip: skipUnlessLiveRpc() }, () => {
   const rpc = new StellarRpc({ url: STELLAR_RPC_URL, maxRequestsPerSecond: 20 });
 
   it('reports health', async () => {

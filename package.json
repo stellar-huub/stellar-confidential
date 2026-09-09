@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Open infrastructure for private, recoverable, and compliant digital asset applications on Stellar.",
   "engines": {
-    "node": ">=20.11"
+    "node": ">=22"
   },
   "packageManager": "pnpm@10.10.0",
   "scripts": {

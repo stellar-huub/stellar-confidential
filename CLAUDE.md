@@ -218,6 +218,16 @@ Open decisions still needing a call are listed in [MILESTONES.md](MILESTONES.md)
 
 Newest first. One entry per merged change. Include what changed and why it matters to someone reading this file later.
 
+### 2026-09-09 — CI fixes
+
+The first CI run failed before executing anything. Three causes, found by reproducing each locally rather than by re-pushing:
+
+- `pnpm/action-setup` errors when the pnpm version is declared both in the workflow and in `packageManager`. Removed it from the workflow; `packageManager` is the single source of truth.
+- Node 20's test runner has no glob support, so `pnpm test` could never have run there (`Could not find '.../**/*.test.ts'`). Node 20 also reached end of life on 2026-04-30, so the matrix is now 22.x and 24.x and `engines` requires >=22.
+- `pnpm test:integration` ran the live-Stellar-node tests in a job with no Stellar node. Integration tests are now gated in two tiers: PostgreSQL and Redis on every PR, live-node tests only where `STELLAR_RPC_URL` is set explicitly, plus a nightly `live-rpc` job that boots stellar/quickstart. Those tests caught a real bug, so they are kept rather than dropped.
+
+Verified on Node 22.14.0 before pushing: 205 unit tests, 23 integration tests without a node, 28 with one.
+
 ### 2026-09-08 — Phases 1 and 2 implemented
 
 Built the confidential indexer and the state recovery engine, plus the Phase 0 foundations they needed. 205 unit tests and 28 integration tests, all passing; lint and build clean.

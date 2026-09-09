@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    # Nightly, for the live-node job only.
+    - cron: '0 3 * * *'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -16,7 +20,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['20.x', '22.x']
+        # Node 20 reached end of life on 2026-04-30. Its test runner also
+        # predates glob support, so `pnpm test` cannot run there at all.
+        node: ['22.x', '24.x']
 
     services:
       postgres:
@@ -42,8 +48,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      # No `version:` here on purpose. package.json's `packageManager` field is
+      # the single source of truth; declaring it in both places is an error.
       - uses: pnpm/action-setup@v4
-        with: { version: 10 }
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
@@ -52,6 +59,9 @@ jobs:
       - run: pnpm lint
       - run: pnpm build
       - run: pnpm test
+      # STELLAR_RPC_URL is deliberately unset: this job provides PostgreSQL and
+      # Redis but no Stellar node, so the live-node tests skip here and run in
+      # the `live-rpc` job instead.
       - run: pnpm test:integration
 
   audit:
@@ -62,8 +72,37 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with: { version: 10 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '24.x', cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm audit --audit-level moderate
+
+  live-rpc:
+    name: live Stellar node
+    # Not on the PR path: booting a Stellar network takes minutes, and these
+    # tests are about agreeing with a real node rather than about this diff.
+    # They caught a real bug (two different ledger-header envelopes), so they
+    # run nightly rather than being dropped.
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      stellar:
+        image: stellar/quickstart:future
+        ports: ['8000:8000']
+        options: >-
+          --health-cmd "curl -sf -X POST http://localhost:8000/rpc -H 'Content-Type: application/json' -d '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getHealth\"}'"
+          --health-interval 15s --health-timeout 10s --health-retries 40 --health-start-period 60s
+
+    env:
+      STELLAR_RPC_URL: http://localhost:8000/rpc
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with: { node-version: '22.x', cache: pnpm }
       - run: pnpm install --frozen-lockfile
-      - run: pnpm audit --audit-level moderate
+      - run: pnpm build
+      - run: pnpm test:integration

@@ -69,13 +69,13 @@ You do not need to be a cryptographer.
 
 ### Prerequisites
 
-| Tool                 | Version          | Notes                    |
-| -------------------- | ---------------- | ------------------------ |
-| Node.js              | 20.x or 22.x LTS |                          |
-| pnpm                 | 9+               | `corepack enable`        |
-| Docker               | recent           | for PostgreSQL and Redis |
-| Git                  | 2.30+            |                          |
-| Rust + `stellar` CLI | latest stable    | only for contract work   |
+| Tool                 | Version          | Notes                                                  |
+| -------------------- | ---------------- | ------------------------------------------------------ |
+| Node.js              | 22.x or 24.x LTS | Node 20 is end-of-life and its test runner cannot glob |
+| pnpm                 | 9+               | `corepack enable`                                      |
+| Docker               | recent           | for PostgreSQL and Redis                               |
+| Git                  | 2.30+            |                                                        |
+| Rust + `stellar` CLI | latest stable    | only for contract work                                 |
 
 ### First run
 

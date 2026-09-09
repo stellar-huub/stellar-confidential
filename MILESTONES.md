@@ -42,7 +42,7 @@ This file is the single source of truth for _what ships, in what order, and what
 ### M0.2 — Continuous integration
 
 - [x] GitHub Actions: install → lint → typecheck → build → test on every PR
-- [x] Node LTS matrix (20.x, 22.x)
+- [x] Node LTS matrix (22.x, 24.x) — Node 20 reached end of life on 2026-04-30
 - [x] Dependency audit step (`pnpm audit`) — non-blocking initially, blocking from Phase 4
 - [ ] Branch protection on `main`: green CI + one review required
 

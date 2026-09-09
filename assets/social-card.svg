@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img">
+  <defs><linearGradient id="s-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5B8DEF"/><stop offset="1" stop-color="#2ED3B7"/></linearGradient></defs>
+  <rect width="1280" height="640" fill="#0B1220"/>
+  <g opacity="0.5"><rect x="944" y="176" width="118" height="12" rx="6" fill="#94A3B8" opacity="0.28"/>
+  <rect x="1076" y="176" width="76" height="12" rx="6" fill="url(#s-g)" opacity="0.62"/>
+  <rect x="944" y="202" width="96" height="12" rx="6" fill="#94A3B8" opacity="0.28"/>
+  <rect x="1076" y="202" width="76" height="12" rx="6" fill="url(#s-g)" opacity="0.62"/>
+  <rect x="944" y="228" width="126" height="12" rx="6" fill="#94A3B8" opacity="0.28"/>
+  <rect x="1076" y="228" width="76" height="12" rx="6" fill="url(#s-g)" opacity="0.62"/>
+  <rect x="944" y="254" width="104" height="12" rx="6" fill="#94A3B8" opacity="0.28"/>
+  <rect x="1076" y="254" width="76" height="12" rx="6" fill="url(#s-g)" opacity="0.62"/>
+  <rect x="944" y="280" width="112" height="12" rx="6" fill="#94A3B8" opacity="0.28"/>
+  <rect x="1076" y="280" width="76" height="12" rx="6" fill="url(#s-g)" opacity="0.62"/>
+  <rect x="944" y="306" width="88" height="12" rx="6" fill="#94A3B8" opacity="0.28"/>
+  <rect x="1076" y="306" width="76" height="12" rx="6" fill="url(#s-g)" opacity="0.62"/>
+  <rect x="944" y="332" width="120" height="12" rx="6" fill="#94A3B8" opacity="0.28"/>
+  <rect x="1076" y="332" width="76" height="12" rx="6" fill="url(#s-g)" opacity="0.62"/></g>
+  <g transform="translate(96, 112)"><polygon points="56.00,8.75 96.92,32.38 96.92,79.62 56.00,103.25 15.08,79.62 15.08,32.38" fill="none" stroke="url(#s-g)" stroke-width="6.12" stroke-linejoin="round"/>
+  <polygon points="56.94,20.14 86.59,37.26 67.76,54.87 61.45,45.52" fill="url(#s-g)" opacity="1.00"/>
+  <polygon points="87.53,38.88 87.53,73.12 62.86,65.62 67.80,55.48" fill="url(#s-g)" opacity="0.74"/>
+  <polygon points="86.59,74.74 56.94,91.86 51.10,66.75 62.35,65.96" fill="url(#s-g)" opacity="1.00"/>
+  <polygon points="55.06,91.86 25.41,74.74 44.24,57.13 50.55,66.48" fill="url(#s-g)" opacity="0.74"/>
+  <polygon points="24.47,73.12 24.47,38.88 49.14,46.38 44.20,56.52" fill="url(#s-g)" opacity="1.00"/>
+  <polygon points="25.41,37.26 55.06,20.14 60.90,45.25 49.65,46.04" fill="url(#s-g)" opacity="0.74"/></g>
+  <text x="96" y="322" font-family="Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="66" font-weight="700" fill="#FFFFFF" letter-spacing="-1.5">Confidential Stellar</text>
+  <text x="96" y="390" font-family="Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="66" font-weight="700" fill="url(#s-g)" letter-spacing="-1.5">Infrastructure</text>
+  <text x="96" y="444" font-family="Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="21" font-weight="400" fill="#94A3B8">Open infrastructure for private, recoverable, compliant assets on Stellar.</text>
+  <g><rect x="96" y="492" width="108" height="44" rx="22" fill="#111A2E" stroke="url(#s-g)" stroke-opacity="0.45"/><text x="150" y="520" font-family="Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#94A3B8" text-anchor="middle">Indexer</text></g>
+  <g><rect x="220" y="492" width="118" height="44" rx="22" fill="#111A2E" stroke="url(#s-g)" stroke-opacity="0.45"/><text x="278" y="520" font-family="Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#94A3B8" text-anchor="middle">Recovery</text></g>
+  <g><rect x="354" y="492" width="118" height="44" rx="22" fill="#111A2E" stroke="url(#s-g)" stroke-opacity="0.45"/><text x="412" y="520" font-family="Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#94A3B8" text-anchor="middle">Auditing</text></g>
+  <g><rect x="488" y="492" width="97" height="44" rx="22" fill="#111A2E" stroke="url(#s-g)" stroke-opacity="0.45"/><text x="536" y="520" font-family="Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#94A3B8" text-anchor="middle">Mobile</text></g>
+</svg>

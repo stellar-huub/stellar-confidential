@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+build/
+.next/
+.turbo/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Secrets — never commit key material
+*.pem
+*.key
+secrets/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Test output
+coverage/
+.nyc_output/
+
+# Python (pitch tooling)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Pitch render output
+pitch/out/
+
+# Editors and OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+
+pitch

@@ -1,0 +1,35 @@
+{
+  "name": "stellar-confidential",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Open infrastructure for private, recoverable, and compliant digital asset applications on Stellar.",
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@10.10.0",
+  "scripts": {
+    "build": "tsc --build tsconfig.json",
+    "clean": "tsc --build tsconfig.json --clean && rm -rf packages/*/dist services/*/dist",
+    "typecheck": "tsc --build tsconfig.json --dry --pretty false && tsc --build tsconfig.json",
+    "test": "node --import tsx --test \"packages/*/test/**/*.test.ts\" \"services/*/test/**/*.test.ts\"",
+    "test:integration": "STELLAR_CONFIDENTIAL_INTEGRATION=1 node --import tsx --test \"packages/*/test/**/*.integration.test.ts\" \"services/*/test/**/*.integration.test.ts\"",
+    "lint": "eslint .",
+    "format": "prettier --write \"**/*.{ts,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,json,md,yml,yaml}\"",
+    "migrate": "node --import tsx packages/indexer/src/db/migrate-cli.ts",
+    "dev": "node --import tsx services/indexer/src/main.ts",
+    "demo": "node --import tsx examples/end-to-end/demo.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "@types/node": "^22.10.5",
+    "@types/pg": "^8.11.10",
+    "@types/ws": "^8.5.13",
+    "eslint": "^9.18.0",
+    "prettier": "^3.4.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.20.0"
+  }
+}

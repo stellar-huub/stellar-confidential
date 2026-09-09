@@ -1,0 +1,11 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/core" },
+    { "path": "packages/crypto" },
+    { "path": "packages/indexer" },
+    { "path": "packages/recovery" },
+    { "path": "services/indexer" },
+    { "path": "services/recovery" }
+  ]
+}

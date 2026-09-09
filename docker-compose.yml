@@ -1,0 +1,53 @@
+# Local development stack (milestone M0.4).
+#
+# Ports are offset from the defaults so this stack never collides with a
+# PostgreSQL or Redis already running on the host.
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: stellar-confidential-postgres
+    environment:
+      POSTGRES_USER: confidential
+      POSTGRES_PASSWORD: confidential
+      POSTGRES_DB: confidential_indexer
+    ports:
+      - '55432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U confidential -d confidential_indexer']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: stellar-confidential-redis
+    ports:
+      - '56379:6379'
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Local Stellar network with RPC, Horizon and friendbot on :8000.
+  # Omit this service if you are pointing at a shared testnet instead.
+  stellar:
+    image: stellar/quickstart:future
+    container_name: stellar-confidential-stellar
+    command: --local --enable-soroban-rpc --limits unlimited
+    ports:
+      - '8000:8000'
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'curl -sf http://localhost:8000/rpc -X POST -H "Content-Type: application/json" -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getHealth\"}" || exit 1',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+volumes:
+  postgres-data:

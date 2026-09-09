@@ -4,8 +4,8 @@
 
 [![Stellar](https://img.shields.io/badge/Stellar-Soroban-blue)](https://stellar.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue)](https://www.typescriptlang.org/)
-[![Status](https://img.shields.io/badge/Status-Early%20Development-orange)]()
-[![License](https://img.shields.io/badge/License-TBD-lightgrey)]()
+[![Status](https://img.shields.io/badge/Status-Early%20Development-orange)](<>)
+[![License](https://img.shields.io/badge/License-TBD-lightgrey)](<>)
 
 Confidential Stellar Infrastructure is an open-source infrastructure project designed to make **Confidential Tokens on Stellar easier to build, integrate, recover, audit, and operate**.
 
@@ -21,12 +21,12 @@ Blockchain transparency is powerful, but many financial applications cannot expo
 
 Consider:
 
-* payroll
-* business payments
-* treasury management
-* private escrow
-* institutional settlement
-* confidential asset management
+- payroll
+- business payments
+- treasury management
+- private escrow
+- institutional settlement
+- confidential asset management
 
 A company may want everyone to verify that a payment happened without publicly revealing the amount.
 
@@ -84,14 +84,14 @@ The indexer will provide applications with access to historical information need
 
 ### Planned capabilities
 
-* Historical event storage
-* Transaction history
-* Account-specific history
-* Event ordering
-* State reconstruction
-* Data integrity verification
-* REST APIs
-* WebSocket APIs
+- Historical event storage
+- Transaction history
+- Account-specific history
+- Event ordering
+- State reconstruction
+- Data integrity verification
+- REST APIs
+- WebSocket APIs
 
 ---
 
@@ -99,10 +99,10 @@ The indexer will provide applications with access to historical information need
 
 Users should not lose access to their confidential transaction history simply because they:
 
-* change devices
-* reinstall a wallet
-* clear local application data
-* remain offline for an extended period
+- change devices
+- reinstall a wallet
+- clear local application data
+- remain offline for an extended period
 
 The recovery layer will retrieve relevant historical events and reconstruct the user's confidential state.
 
@@ -149,11 +149,11 @@ Instead, applications will be able to retrieve historical data from multiple arc
 
 This can improve:
 
-* availability
-* resilience
-* data redundancy
-* censorship resistance
-* infrastructure independence
+- availability
+- resilience
+- data redundancy
+- censorship resistance
+- infrastructure independence
 
 ---
 
@@ -166,25 +166,25 @@ A developer should eventually be able to write code similar to:
 ```typescript
 const wallet = await ConfidentialWallet.connect({
   account,
-  token
+  token,
 });
 
 await wallet.sync();
 
 await wallet.transfer({
   recipient,
-  amount
+  amount,
 });
 ```
 
 The SDK will handle the underlying complexity of:
 
-* wallet synchronization
-* state recovery
-* transaction preparation
-* proof-generation orchestration
-* transaction submission
-* disclosure operations
+- wallet synchronization
+- state recovery
+- transaction preparation
+- proof-generation orchestration
+- transaction submission
+- disclosure operations
 
 The SDK is intended to be a developer-friendly interface rather than a replacement for Stellar's underlying cryptographic infrastructure.
 
@@ -198,12 +198,12 @@ Authorized organizations may need controlled access to financial information.
 
 The project will provide infrastructure for:
 
-* auditor access
-* viewing-key workflows
-* selective disclosure
-* permissions
-* access logs
-* audit reports
+- auditor access
+- viewing-key workflows
+- selective disclosure
+- permissions
+- access logs
+- audit reports
 
 The architecture will maintain a separation between:
 
@@ -223,12 +223,12 @@ Different applications require different levels of control.
 
 The infrastructure will provide reusable tools for applications that need capabilities such as:
 
-* account authorization
-* account restrictions
-* controlled disclosure
-* compliance workflows
-* audit history
-* administrative permissions
+- account authorization
+- account restrictions
+- controlled disclosure
+- compliance workflows
+- audit history
+- administrative permissions
 
 The goal is to make these capabilities easier to integrate into real applications without forcing every developer to build the same infrastructure from scratch.
 
@@ -240,20 +240,20 @@ Mobile devices are a major target for this project.
 
 Confidential applications must work under the constraints of real-world phones, including:
 
-* limited memory
-* limited CPU resources
-* unreliable network connectivity
-* mobile browser limitations
-* application lifecycle interruptions
+- limited memory
+- limited CPU resources
+- unreliable network connectivity
+- mobile browser limitations
+- application lifecycle interruptions
 
 The project will investigate:
 
-* WebAssembly optimization
-* mobile-friendly proving
-* Android compatibility
-* efficient state synchronization
-* background recovery
-* native/mobile SDK integrations
+- WebAssembly optimization
+- mobile-friendly proving
+- Android compatibility
+- efficient state synchronization
+- background recovery
+- native/mobile SDK integrations
 
 ---
 
@@ -278,12 +278,12 @@ The application will demonstrate how a company could use confidential assets for
 
 The application will demonstrate:
 
-* confidential payments
-* wallet synchronization
-* state recovery
-* mobile access
-* authorized auditing
-* transaction history
+- confidential payments
+- wallet synchronization
+- state recovery
+- mobile access
+- authorized auditing
+- transaction history
 
 The payroll application is a reference implementation, not the entire project.
 
@@ -336,35 +336,35 @@ The initial implementation is planned around the following technologies.
 
 ### Blockchain
 
-* Stellar
-* Soroban
-* Confidential Token contracts
-* Stellar RPC
+- Stellar
+- Soroban
+- Confidential Token contracts
+- Stellar RPC
 
 ### Backend
 
-* Node.js
-* TypeScript
-* PostgreSQL
-* Redis
+- Node.js
+- TypeScript
+- PostgreSQL
+- Redis
 
 ### API
 
-* REST
-* WebSocket
+- REST
+- WebSocket
 
 ### SDK
 
-* TypeScript
-* Browser support
-* WebAssembly
-* Mobile integrations
+- TypeScript
+- Browser support
+- WebAssembly
+- Mobile integrations
 
 ### Infrastructure
 
-* Docker
-* Cloud deployments
-* Self-hosted archive nodes
+- Docker
+- Cloud deployments
+- Self-hosted archive nodes
 
 ---
 
@@ -436,52 +436,52 @@ This structure may change as development progresses.
 
 ## Phase 1 — Indexing
 
-* Confidential Token event ingestion
-* PostgreSQL storage
-* Historical event API
-* Account history
-* Testnet deployment
+- Confidential Token event ingestion
+- PostgreSQL storage
+- Historical event API
+- Account history
+- Testnet deployment
 
 ## Phase 2 — Recovery
 
-* Event replay
-* State reconstruction
-* State verification
-* Recovery API
-* Wallet synchronization
+- Event replay
+- State reconstruction
+- State verification
+- Recovery API
+- Wallet synchronization
 
 ## Phase 3 — Multi-Provider Infrastructure
 
-* Archive provider specification
-* Multiple archive support
-* Provider discovery
-* Failover
-* Consistency verification
+- Archive provider specification
+- Multiple archive support
+- Provider discovery
+- Failover
+- Consistency verification
 
 ## Phase 4 — Developer SDK
 
-* TypeScript client
-* Wallet integration
-* Recovery client
-* Transaction client
-* Documentation
-* Example applications
+- TypeScript client
+- Wallet integration
+- Recovery client
+- Transaction client
+- Documentation
+- Example applications
 
 ## Phase 5 — Auditing & Compliance
 
-* Auditor dashboard
-* Viewing-key workflows
-* Disclosure requests
-* Access controls
-* Audit logs
+- Auditor dashboard
+- Viewing-key workflows
+- Disclosure requests
+- Access controls
+- Audit logs
 
 ## Phase 6 — Mobile
 
-* Android support
-* Mobile recovery
-* WebAssembly optimization
-* Mobile SDK
-* Mobile reference wallet
+- Android support
+- Mobile recovery
+- WebAssembly optimization
+- Mobile SDK
+- Mobile reference wallet
 
 ## Phase 7 — Reference Application
 
@@ -495,14 +495,14 @@ Security is a core requirement of the project.
 
 The project will prioritize:
 
-* non-custodial architecture
-* secure key handling
-* cryptographic verification
-* minimal infrastructure trust
-* permission separation
-* reproducible testing
-* open-source review
-* independent security audits before production use
+- non-custodial architecture
+- secure key handling
+- cryptographic verification
+- minimal infrastructure trust
+- permission separation
+- reproducible testing
+- open-source review
+- independent security audits before production use
 
 **Important:** Stellar Confidential Tokens are currently an emerging/developer-preview technology. This project should not be used with production assets until the underlying technology and this infrastructure have been independently reviewed and declared production-ready.
 
@@ -536,18 +536,22 @@ Contributions are welcome.
 
 Areas that will be particularly useful include:
 
-* Stellar/Soroban development
-* TypeScript
-* PostgreSQL
-* blockchain indexing
-* cryptography
-* zero-knowledge systems
-* WebAssembly
-* Android/mobile development
-* security research
-* developer documentation
+- Stellar/Soroban development
+- TypeScript
+- PostgreSQL
+- blockchain indexing
+- cryptography
+- zero-knowledge systems
+- WebAssembly
+- Android/mobile development
+- security research
+- developer documentation
 
-Before contributing, please read the project contribution guidelines once they are available.
+Before contributing, please read [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Current, actionable work is tracked in [MILESTONES.md](MILESTONES.md) — Phase 0 milestones are deliberately approachable and require no cryptography background.
+
+Contributors and AI assistants should also read [CLAUDE.md](CLAUDE.md), which carries the project's working conventions and invariants and is updated with every change.
 
 ---
 
@@ -557,11 +561,11 @@ This project builds on the emerging Stellar Confidential Token ecosystem and rel
 
 Useful starting points include:
 
-* [Stellar](https://stellar.org/)
-* [Stellar Developers](https://developers.stellar.org/)
-* [Soroban](https://developers.stellar.org/docs/learn/soroban)
-* [OpenZeppelin](https://www.openzeppelin.com/)
-* [Stellar Community Fund](https://communityfund.stellar.org/)
+- [Stellar](https://stellar.org/)
+- [Stellar Developers](https://developers.stellar.org/)
+- [Soroban](https://developers.stellar.org/docs/learn/soroban)
+- [OpenZeppelin](https://www.openzeppelin.com/)
+- [Stellar Community Fund](https://communityfund.stellar.org/)
 
 ---
 

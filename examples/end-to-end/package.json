@@ -1,0 +1,17 @@
+{
+  "name": "@stellar-confidential/example-end-to-end",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --import tsx demo.ts"
+  },
+  "dependencies": {
+    "@stellar-confidential/core": "workspace:*",
+    "@stellar-confidential/crypto": "workspace:*",
+    "@stellar-confidential/indexer": "workspace:*",
+    "@stellar-confidential/recovery": "workspace:*",
+    "@stellar-confidential/service-indexer": "workspace:*",
+    "@stellar-confidential/service-recovery": "workspace:*"
+  }
+}

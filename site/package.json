@@ -1,0 +1,15 @@
+{
+  "name": "@stellar-confidential/site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node --import tsx src/build.ts",
+    "serve": "node --import tsx src/serve.ts"
+  },
+  "devDependencies": {
+    "highlight.js": "^11.11.1",
+    "markdown-it": "^14.1.0",
+    "@types/markdown-it": "^14.1.2"
+  }
+}

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="320" viewBox="0 0 1280 320" role="img">
+  <defs><linearGradient id="b-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5B8DEF"/><stop offset="1" stop-color="#2ED3B7"/></linearGradient></defs>
+  <rect width="1280" height="320" fill="#0B1220"/>
+  <g opacity="0.6"><rect x="940" y="82" width="118" height="12" rx="6" fill="#94A3B8" opacity="0.28"/>
+  <rect x="1072" y="82" width="76" height="12" rx="6" fill="url(#b-g)" opacity="0.62"/>
+  <rect x="940" y="108" width="96" height="12" rx="6" fill="#94A3B8" opacity="0.28"/>
+  <rect x="1072" y="108" width="76" height="12" rx="6" fill="url(#b-g)" opacity="0.62"/>
+  <rect x="940" y="134" width="126" height="12" rx="6" fill="#94A3B8" opacity="0.28"/>
+  <rect x="1072" y="134" width="76" height="12" rx="6" fill="url(#b-g)" opacity="0.62"/>
+  <rect x="940" y="160" width="104" height="12" rx="6" fill="#94A3B8" opacity="0.28"/>
+  <rect x="1072" y="160" width="76" height="12" rx="6" fill="url(#b-g)" opacity="0.62"/>
+  <rect x="940" y="186" width="112" height="12" rx="6" fill="#94A3B8" opacity="0.28"/>
+  <rect x="1072" y="186" width="76" height="12" rx="6" fill="url(#b-g)" opacity="0.62"/>
+  <rect x="940" y="212" width="88" height="12" rx="6" fill="#94A3B8" opacity="0.28"/>
+  <rect x="1072" y="212" width="76" height="12" rx="6" fill="url(#b-g)" opacity="0.62"/></g>
+  <g transform="translate(88, 96)"><polygon points="64.00,10.00 110.77,37.00 110.77,91.00 64.00,118.00 17.23,91.00 17.23,37.00" fill="none" stroke="url(#b-g)" stroke-width="7.00" stroke-linejoin="round"/>
+  <polygon points="65.07,23.01 98.96,42.58 77.44,62.71 70.23,52.03" fill="url(#b-g)" opacity="1.00"/>
+  <polygon points="100.03,44.44 100.03,83.56 71.84,74.99 77.49,63.41" fill="url(#b-g)" opacity="0.74"/>
+  <polygon points="98.96,85.42 65.07,104.99 58.40,76.28 71.25,75.39" fill="url(#b-g)" opacity="1.00"/>
+  <polygon points="62.93,104.99 29.04,85.42 50.56,65.29 57.77,75.97" fill="url(#b-g)" opacity="0.74"/>
+  <polygon points="27.97,83.56 27.97,44.44 56.16,53.01 50.51,64.59" fill="url(#b-g)" opacity="1.00"/>
+  <polygon points="29.04,42.58 62.93,23.01 69.60,51.72 56.75,52.61" fill="url(#b-g)" opacity="0.74"/></g>
+  <text x="252" y="150" font-family="Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="52" font-weight="700" fill="#FFFFFF" letter-spacing="-1">Confidential Stellar</text>
+  <text x="252" y="188" font-family="Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="19" font-weight="600" fill="url(#b-g)" letter-spacing="5.5">INFRASTRUCTURE</text>
+  <text x="252" y="232" font-family="Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#94A3B8">Private assets. Verifiable transactions. Recoverable state.</text>
+</svg>

@@ -1,0 +1,57 @@
+name: Docs
+
+on:
+  push:
+    branches: [main]
+    # Only when something the site actually renders has changed.
+    paths:
+      - 'site/**'
+      - 'assets/**'
+      - 'docs/**'
+      - 'README.md'
+      - 'MILESTONES.md'
+      - 'CONTRIBUTING.md'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch:
+
+# One publish at a time, and a newer commit supersedes a queued one.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Before the build, not after: the build reads base_url from it to write
+      # absolute social-card URLs into the page metadata.
+      - uses: actions/configure-pages@v5
+        id: pages
+
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22.x', cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm docs:build
+        env:
+          SITE_URL: ${{ steps.pages.outputs.base_url }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

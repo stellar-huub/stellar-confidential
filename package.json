@@ -19,7 +19,9 @@
     "format:check": "prettier --check \"**/*.{ts,json,md,yml,yaml}\"",
     "migrate": "node --import tsx packages/indexer/src/db/migrate-cli.ts",
     "dev": "node --import tsx services/indexer/src/main.ts",
-    "demo": "node --import tsx examples/end-to-end/demo.ts"
+    "demo": "node --import tsx examples/end-to-end/demo.ts",
+    "docs:build": "pnpm --filter @stellar-confidential/site build",
+    "docs:serve": "pnpm --filter @stellar-confidential/site serve"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",

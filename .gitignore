@@ -4,6 +4,7 @@ node_modules/
 
 # Build output
 dist/
+site/dist/
 build/
 .next/
 .turbo/
@@ -36,6 +37,12 @@ venv/
 
 # Pitch render output
 pitch/out/
+
+# Generated brand rasters. Regenerate with assets/generate.py --png.
+# social-card.png is committed: GitHub's social-preview upload takes raster only.
+assets/*.png
+!assets/social-card.png
+assets/.raster-*.html
 
 # Editors and OS
 .DS_Store

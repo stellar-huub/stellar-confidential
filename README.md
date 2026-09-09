@@ -1,4 +1,11 @@
-# Confidential Stellar Infrastructure
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/banner-dark.svg">
+    <img alt="Confidential Stellar Infrastructure" src="assets/banner-light.svg" width="820">
+  </picture>
+</p>
+
+<h1 align="center">Confidential Stellar Infrastructure</h1>
 
 > Open infrastructure for private, recoverable, and compliant digital asset applications on Stellar.
 

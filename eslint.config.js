@@ -15,10 +15,11 @@ export default tseslint.config(
     },
   },
   {
-    // Services and examples are processes: they are allowed to write to stdout.
+    // Services, the site builder and examples are processes: they print to stdout.
     files: [
       'services/**/*.ts',
       'examples/**/*.ts',
+      'site/**/*.ts',
       'packages/*/scripts/**/*.ts',
       'packages/*/src/**/cli.ts',
       '**/*-cli.ts',
